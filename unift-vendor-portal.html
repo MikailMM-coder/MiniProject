@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unift Vendor Portal — Jamal Kopitiam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3E8;
+    --paper-2:#EFE9D6;
+    --navy:#1D2B4F;
+    --navy-soft:#5B6478;
+    --card:#FFFFFF;
+    --yellow:#FFC93C;
+    --green:#2F9C63;
+    --green-bg:#E3F3E9;
+    --coral:#E8562F;
+    --coral-bg:#FCE7DF;
+    --teal:#0F6E56;
+    --teal-dark:#0B5443;
+    --teal-bg:#E1F1EC;
+    --line:#1D2B4F;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper-2); color:var(--navy);
+    font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif; margin:0;}
+
+  .shell{display:grid; grid-template-columns:250px 1fr; min-height:100vh;}
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    background:var(--navy); color:var(--paper); padding:26px 20px;
+    display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
+  }
+  .logo{display:flex; align-items:center; gap:9px; margin-bottom:34px; padding:0 4px;}
+  .logo-mark{
+    width:32px; height:32px; border-radius:9px; background:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .logo-mark svg{width:17px; height:17px;}
+  .logo-text{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px;}
+  .logo-tag{font-size:10.5px; color:#A7B0C4; margin-left:4px;}
+
+  .nav-group{margin-bottom:26px;}
+  .nav-label{font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:#7C87A3; padding:0 12px; margin-bottom:8px;}
+  .nav-item{
+    display:flex; align-items:center; gap:11px; padding:10px 12px; border-radius:10px;
+    font-size:14px; font-weight:500; color:#C5CCDD; cursor:pointer; margin-bottom:2px;
+  }
+  .nav-item .ic{width:18px; text-align:center; font-size:14px;}
+  .nav-item.active{background:#22463D; color:var(--paper); font-weight:600;}
+  .nav-item.active .ic{color:var(--teal-bg);}
+  .nav-item .badge{
+    margin-left:auto; background:var(--teal); color:var(--paper); font-size:10.5px;
+    font-weight:700; padding:1px 7px; border-radius:999px;
+  }
+
+  .sidebar-bottom{margin-top:auto; padding-top:16px; border-top:1px solid #33436C;}
+  .side-profile{display:flex; align-items:center; gap:10px; padding:8px 4px;}
+  .side-avatar{
+    width:36px; height:36px; border-radius:50%; background:var(--teal);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0;
+  }
+  .side-name{font-size:13.5px; font-weight:600;}
+  .side-role{font-size:11.5px; color:#A7B0C4;}
+
+  /* ---------- Main ---------- */
+  main{padding:30px 40px 60px;}
+  .topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; gap:24px;}
+  .topbar h1{font-size:24px;}
+  .topbar p{margin:4px 0 0; font-size:13.5px; color:var(--navy-soft);}
+
+  .status-toggle{
+    display:flex; align-items:center; gap:12px; background:var(--card); border:1.5px solid var(--line);
+    border-radius:999px; padding:6px 6px 6px 16px; flex-shrink:0;
+  }
+  .status-toggle .label{font-size:13px; font-weight:600;}
+  .status-toggle .label.on{color:var(--teal-dark);}
+  .status-toggle .label.off{color:var(--navy-soft);}
+  .switch{
+    width:44px; height:24px; background:var(--navy-soft); border-radius:999px; position:relative; cursor:pointer;
+  }
+  .switch .knob{width:18px; height:18px; background:var(--card); border-radius:50%; position:absolute; top:3px; left:3px;}
+
+  .stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:26px;}
+  .stat-card{background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:18px 20px;}
+  .stat-card .sc-label{font-size:12px; color:var(--navy-soft); margin-bottom:8px; display:flex; align-items:center; gap:6px;}
+  .stat-card .sc-value{font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700;}
+  .stat-card .sc-sub{font-size:11.5px; color:var(--teal-dark); font-weight:600; margin-top:4px;}
+  .dot-mini{width:6px; height:6px; border-radius:50%; background:var(--teal);}
+
+  .grid-2{display:grid; grid-template-columns:1.3fr 0.9fr; gap:22px; margin-bottom:26px;}
+  @media (max-width:1100px){ .grid-2{grid-template-columns:1fr;} }
+
+  .panel{background:var(--card); border:1.5px solid var(--line); border-radius:16px; padding:24px;}
+  .panel-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
+  .panel-head h3{font-size:16px;}
+  .panel-head .count{font-size:12px; color:var(--navy-soft); font-weight:500;}
+  .panel-head a{font-size:12.5px; color:var(--navy-soft); font-weight:600; text-decoration:none;}
+
+  /* Incoming orders */
+  .order-row{
+    display:flex; align-items:center; gap:14px; padding:14px 12px; border-radius:12px;
+    border:1.5px solid var(--paper-2); margin-bottom:10px;
+  }
+  .order-row:last-child{margin-bottom:0;}
+  .order-row.new{border-color:var(--teal); background:var(--teal-bg);}
+  .order-icon{
+    width:42px; height:42px; border-radius:10px; background:var(--teal-bg); color:var(--teal-dark);
+    display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; flex-shrink:0;
+  }
+  .order-info{flex:1;}
+  .order-info b{font-size:13.5px; display:block;}
+  .order-info span{font-size:12px; color:var(--navy-soft);}
+  .order-fee{text-align:right; margin-right:6px;}
+  .order-fee b{font-family:'Space Grotesk',sans-serif; font-size:15px; display:block;}
+  .order-fee span{font-size:11px; color:var(--navy-soft);}
+  .row-actions{display:flex; gap:8px;}
+  .btn-accept{
+    background:var(--teal); color:var(--paper); border:none; border-radius:9px;
+    padding:9px 14px; font-weight:700; font-size:12.5px; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+  .btn-decline{
+    background:transparent; color:var(--navy-soft); border:1.5px solid var(--paper-2); border-radius:9px;
+    padding:9px 10px; font-weight:600; font-size:12.5px; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+  .prep-pill{
+    font-size:11px; font-weight:700; padding:4px 11px; border-radius:999px; background:var(--yellow); color:var(--navy);
+  }
+
+  /* Kitchen queue */
+  .kq-item{display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--paper-2);}
+  .kq-item:last-child{border-bottom:none;}
+  .kq-dot{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
+  .kq-dot.cooking{background:var(--yellow);}
+  .kq-dot.ready{background:var(--teal);}
+  .kq-text{flex:1;}
+  .kq-text b{font-size:13px; display:block;}
+  .kq-text span{font-size:11.5px; color:var(--navy-soft);}
+  .kq-state{font-size:11px; font-weight:700;}
+  .kq-state.cooking{color:var(--yellow-dark, #B87F00);}
+  .kq-state.ready{color:var(--teal-dark);}
+
+  /* Menu list */
+  .menu-row{display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--paper-2);}
+  .menu-row:last-child{border-bottom:none;}
+  .menu-info{flex:1;}
+  .menu-info b{font-size:13px; display:block;}
+  .menu-info span{font-size:11.5px; color:var(--navy-soft);}
+  .menu-price{font-family:'Space Grotesk',sans-serif; font-size:13.5px; font-weight:600; margin-right:10px;}
+  .mini-switch{width:34px; height:19px; background:var(--teal); border-radius:999px; position:relative; cursor:pointer; flex-shrink:0;}
+  .mini-switch.off{background:#D8D2C2;}
+  .mini-switch .knob{width:14px; height:14px; background:var(--card); border-radius:50%; position:absolute; top:2.5px; right:2.5px;}
+  .mini-switch.off .knob{right:auto; left:2.5px;}
+
+  /* History table */
+  .history-table{width:100%; border-collapse:collapse;}
+  .history-table th{
+    text-align:left; font-size:11.5px; color:var(--navy-soft); text-transform:uppercase;
+    letter-spacing:0.05em; padding:0 12px 10px; font-weight:600;
+  }
+  .history-table td{padding:13px 12px; font-size:13.5px; border-top:1px solid var(--paper-2);}
+  .history-table tr:hover td{background:var(--paper);}
+  .pill{font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; display:inline-block;}
+  .pill.done{background:var(--teal-bg); color:var(--teal-dark);}
+  .pill.paid{background:var(--paper-2); color:var(--navy-soft);}
+
+  .help-bubble{
+    position:fixed; bottom:26px; right:26px; background:var(--navy); color:var(--paper);
+    width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:2px solid var(--line); font-size:20px; cursor:pointer; z-index:10;
+  }
+  .help-tip{
+    position:fixed; bottom:88px; right:26px; background:var(--card); border:1.5px solid var(--line);
+    border-radius:12px; padding:10px 14px; font-size:12.5px; max-width:200px; box-shadow:0 6px 0 rgba(0,0,0,0.05);
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12L11 3L20 8L13 17L4 12Z" stroke="#1D2B4F" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div><span class="logo-text">unift</span><span class="logo-tag">vendor</span></div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Sell</div>
+      <div class="nav-item active"><span class="ic">◆</span>Dashboard</div>
+      <div class="nav-item"><span class="ic">◉</span>Incoming orders<span class="badge">2</span></div>
+      <div class="nav-item"><span class="ic">▤</span>Menu</div>
+      <div class="nav-item"><span class="ic">↻</span>Order history</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Account</div>
+      <div class="nav-item"><span class="ic">◈</span>Earnings & payout</div>
+      <div class="nav-item"><span class="ic">✎</span>Stall profile</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Support</div>
+      <div class="nav-item"><span class="ic">?</span>Help</div>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="side-profile">
+        <div class="side-avatar">S</div>
+        <div>
+          <div class="side-name">Jamal Kopitiam</div>
+          <div class="side-role">Main cafeteria · Lot 4</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>Good afternoon, Jamal</h1>
+        <p>2 new orders waiting, 1 already cooking.</p>
+      </div>
+      <div class="status-toggle">
+        <span class="label off">Stall Close</span>
+        <div class="switch"><div class="knob"></div></div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="sc-label"><span class="dot-mini"></span>Orders today</div>
+        <div class="sc-value">42</div>
+        <div class="sc-sub">+6 vs yesterday</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Today's sales</div>
+        <div class="sc-value">RM 318.00</div>
+        <div class="sc-sub">On track for RM 400</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Avg. prep time</div>
+        <div class="sc-value">7 min</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">This week</div>
+        <div class="sc-value">RM 1,940</div>
+        <div class="sc-sub">Payout tomorrow</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Incoming orders</h3>
+          <span class="count">2 need a response</span>
+        </div>
+
+        <div class="order-row new">
+          <div class="order-icon">01</div>
+          <div class="order-info">
+            <b>Hor fun, iced lemon tea</b>
+            <span>#UN2281 · Michael, Block C Room 214</span>
+          </div>
+          <div class="order-fee"><b>RM 12.50</b><span>just now</span></div>
+          <div class="row-actions">
+            <button class="btn-accept">Accept</button>
+            <button class="btn-decline">✕</button>
+          </div>
+        </div>
+
+        <div class="order-row new">
+          <div class="order-icon">02</div>
+          <div class="order-info">
+            <b>Wonton mee x2, kopi-o</b>
+            <span>#UN2282 · Aisyah, Library Level 3</span>
+          </div>
+          <div class="order-fee"><b>RM 18.00</b><span>1 min ago</span></div>
+          <div class="row-actions">
+            <button class="btn-accept">Accept</button>
+            <button class="btn-decline">✕</button>
+          </div>
+        </div>
+
+        <div class="order-row">
+          <div class="order-icon">03</div>
+          <div class="order-info">
+            <b>Char kuey teow</b>
+            <span>#UN2280 · Danish, College Block D</span>
+          </div>
+          <div class="order-fee"><b>RM 9.50</b><span>3 min ago</span></div>
+          <span class="prep-pill">Cooking</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Kitchen queue</h3>
+          <span class="count">3 active</span>
+        </div>
+        <div class="kq-item">
+          <div class="kq-dot cooking"></div>
+          <div class="kq-text"><b>Char kuey teow</b><span>#UN2280 · started 3 min ago</span></div>
+          <div class="kq-state cooking">Cooking</div>
+        </div>
+        <div class="kq-item">
+          <div class="kq-dot cooking"></div>
+          <div class="kq-text"><b>Hor fun, iced lemon tea</b><span>#UN2281 · queued</span></div>
+          <div class="kq-state cooking">Queued</div>
+        </div>
+        <div class="kq-item">
+          <div class="kq-dot ready"></div>
+          <div class="kq-text"><b>Nasi lemak rendang x2</b><span>#UN2276 · waiting for runner</span></div>
+          <div class="kq-state ready">Ready</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Menu</h3>
+          <a href="#">Manage all →</a>
+        </div>
+        <div class="menu-row">
+          <div class="menu-info"><b>Hor fun</b><span>Flat rice noodles, house broth</span></div>
+          <div class="menu-price">RM 8.00</div>
+          <div class="mini-switch"><div class="knob"></div></div>
+        </div>
+        <div class="menu-row">
+          <div class="menu-info"><b>Wonton mee</b><span>Dry or soup, char siu</span></div>
+          <div class="menu-price">RM 9.00</div>
+          <div class="mini-switch"><div class="knob"></div></div>
+        </div>
+        <div class="menu-row">
+          <div class="menu-info"><b>Iced lemon tea</b><span>Refill available</span></div>
+          <div class="menu-price">RM 3.50</div>
+          <div class="mini-switch"><div class="knob"></div></div>
+        </div>
+        <div class="menu-row">
+          <div class="menu-info"><b>Curry mee</b><span>Sold out for today</span></div>
+          <div class="menu-price">RM 9.50</div>
+          <div class="mini-switch off"><div class="knob"></div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Payout</h3>
+        </div>
+        <div class="kq-item">
+          <div class="kq-text"><b>Next payout</b><span>Tomorrow, to Maybank ••••4821</span></div>
+          <div class="kq-state ready">RM 318.00</div>
+        </div>
+        <div class="kq-item">
+          <div class="kq-text"><b>Last payout</b><span>Yesterday, 3:00 PM</span></div>
+          <div class="kq-state ready">RM 274.50</div>
+        </div>
+        <div class="kq-item">
+          <div class="kq-text"><b>This week so far</b><span>6 payouts</span></div>
+          <div class="kq-state ready">RM 1,940.00</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Recent orders</h3>
+        <span class="count">Last 5 orders</span>
+      </div>
+      <table class="history-table">
+        <thead>
+          <tr><th>Order</th><th>Customer</th><th>Items</th><th>Prep time</th><th>Total</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#UN2276</td><td>Farah</td><td>Nasi lemak rendang x2</td><td>8 min</td><td>RM 17.00</td>
+            <td><span class="pill done">Ready</span></td>
+          </tr>
+          <tr>
+            <td>#UN2264</td><td>Wei Jian</td><td>Hor fun</td><td>6 min</td><td>RM 8.00</td>
+            <td><span class="pill paid">Delivered</span></td>
+          </tr>
+          <tr>
+            <td>#UN2251</td><td>Nurul</td><td>Wonton mee, kopi-o</td><td>7 min</td><td>RM 12.50</td>
+            <td><span class="pill paid">Delivered</span></td>
+          </tr>
+          <tr>
+            <td>#UN2238</td><td>Danish</td><td>Curry mee</td><td>9 min</td><td>RM 9.50</td>
+            <td><span class="pill paid">Delivered</span></td>
+          </tr>
+          <tr>
+            <td>#UN2219</td><td>Michael</td><td>Hor fun, iced lemon tea</td><td>7 min</td><td>RM 11.50</td>
+            <td><span class="pill paid">Delivered</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div class="help-tip">Order dispute or runner no-show? Tap here — average reply under 2 min.</div>
+<div class="help-bubble">?</div>
+
+</body>
+</html>

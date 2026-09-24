@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unift — food's here before your lecture is</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3E8;
+    --paper-2:#EFE9D6;
+    --navy:#1D2B4F;
+    --navy-soft:#5B6478;
+    --card:#FFFFFF;
+    --yellow:#FFC93C;
+    --yellow-dark:#B87F00;
+    --green:#2F9C63;
+    --green-bg:#E3F3E9;
+    --coral:#E8562F;
+    --coral-bg:#FCE7DF;
+    --teal:#0F6E56;
+    --teal-bg:#E1F1EC;
+    --line:#1D2B4F;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--navy);
+    font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif; margin:0;}
+  .note-font{font-family:'Caveat',cursive;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 40px;}
+  a{color:inherit;}
+
+  /* ---------- Nav ---------- */
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 40px; max-width:1180px; margin:0 auto;
+  }
+  .logo{display:flex; align-items:center; gap:9px;}
+  .logo-mark{
+    width:38px; height:38px; border-radius:9px; background:var(--navy);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .logo-mark svg{width:22px; height:22px;}
+  .logo-text{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:30px;}
+  .nav-links{display:flex; gap:30px; list-style:none; margin:0; padding:0; font-size:14.5px; font-weight:500; color:var(--navy-soft);}
+  .nav-links a{text-decoration:none;}
+  .nav-links a:hover{color:var(--navy);}
+
+  .nav-right{display:flex; align-items:center; gap:12px;}
+  .login-menu{position:relative;}
+  .login-btn{
+    display:flex; align-items:center; gap:6px; background:var(--card);
+    border:1.5px solid var(--line); border-radius:999px; padding:9px 16px;
+    font-size:13.5px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; color:var(--navy);
+  }
+  .login-btn .chev{font-size:10px; color:var(--navy-soft);}
+  .login-dropdown{
+    position:absolute; top:100%; right:0; padding-top: 8px; background:var(--card);
+    border:1.5px solid var(--line); border-radius:14px; padding:8px; width:210px;
+    box-shadow:0 10px 0 rgba(0,0,0,0.06); display:none; z-index:20;
+  }
+  .login-menu:hover .login-dropdown{display:block;}
+  .login-option{
+    display:flex; align-items:center; gap:10px; padding:10px 10px; border-radius:9px;
+    cursor:pointer; text-decoration:none; color:var(--navy);
+  }
+  .login-option:hover{background:var(--paper-2);}
+  .login-option .lo-ic{
+    width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:700; flex-shrink:0;
+  }
+  .login-option .lo-ic.student{background:var(--yellow); color:var(--navy);}
+  .login-option .lo-ic.runner{background:var(--coral-bg); color:var(--coral);}
+  .login-option .lo-ic.vendor{background:var(--teal-bg); color:var(--teal);}
+  .login-option .lo-text b{display:block; font-size:13px; font-weight:600;}
+  .login-option .lo-text span{font-size:11.5px; color:var(--navy-soft);}
+
+  .profile-chip{
+    display:flex; align-items:center; gap:9px; background:var(--card);
+    border:1.5px solid var(--line); border-radius:999px; padding:6px 14px 6px 6px;
+    font-size:13.5px; font-weight:600;
+  }
+  .avatar{
+    width:28px; height:28px; border-radius:50%; background:var(--yellow);
+    display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; color:var(--navy);
+  }
+  .credit-pill{
+    display:flex; align-items:center; gap:4px; font-size:12px; color:var(--navy-soft); font-weight:500;
+  }
+  .credit-pill .dot-g{width:6px; height:6px; border-radius:50%; background:var(--green);}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:60px 0 0;}
+  .hero-grid{display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center;}
+  .tag-row{display:flex; gap:8px; margin-bottom:22px;}
+  .tag{
+    font-size:12.5px; font-weight:600; padding:5px 12px; border-radius:999px;
+    border:1.5px solid var(--line);
+  }
+  .tag.on{background:var(--green-bg); border-color:var(--green); color:#1D6B3F;}
+
+  .hero h1{font-size:50px; line-height:1.05; margin-bottom:20px;}
+  .hero h1 .accent{
+    background:var(--yellow); padding:2px 10px; display:inline-block; border-radius:6px;
+    transform:rotate(-1.5deg);
+  }
+  .hero p.sub{font-size:16.5px; line-height:1.6; color:var(--navy-soft); max-width:440px; margin:0 0 30px;}
+
+  .search-bar{
+    display:flex; align-items:center; gap:0; background:var(--card);
+    border:2px solid var(--line); border-radius:14px; padding:6px; margin-bottom:14px; max-width:480px;
+  }
+  .search-bar select, .search-bar input{
+    border:none; outline:none; background:transparent; font-family:'Inter',sans-serif;
+    font-size:14px; color:var(--navy); padding:10px 12px;
+  }
+  .search-bar select{border-right:1.5px solid var(--paper-2); font-weight:600; max-width:130px;}
+  .search-bar input{flex:1;}
+  .search-bar button{
+    background:var(--navy); color:var(--paper); border:none; border-radius:9px;
+    padding:11px 20px; font-weight:600; font-size:14px; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+  .hero-hint{font-size:13px; color:var(--navy-soft); margin-bottom:36px;}
+  .hero-hint b{color:var(--navy);}
+
+  .cta-row{display:flex; gap:14px;}
+  .btn-primary{
+    background:var(--navy); color:var(--paper); border:2px solid var(--navy);
+    padding:13px 24px; border-radius:10px; font-weight:600; font-size:14.5px; cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-ghost{
+    background:transparent; color:var(--navy); border:2px solid var(--line);
+    padding:13px 24px; border-radius:10px; font-weight:600; font-size:14.5px; cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-primary:hover{background:var(--yellow); color:var(--navy); border-color:var(--yellow);}
+
+  /* ---------- Runner image carousel ---------- */
+  .runner-carousel{
+    position:relative; border-radius:18px; overflow:hidden;
+    border:2px solid var(--line); background:var(--navy); height:420px;
+  }
+  .carousel-track{
+    display:flex; height:100%; transition:transform 0.5s ease;
+  }
+  .carousel-slide{
+    min-width:100%; height:100%; position:relative;
+  }
+  .carousel-slide img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  /* Placeholder shown until a real <img src> is added */
+  .carousel-placeholder{
+    width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:10px; background:
+      repeating-linear-gradient(45deg, #26355C, #26355C 12px, #2A3B66 12px, #2A3B66 24px);
+    color:var(--paper); text-align:center; padding:30px;
+  }
+  .carousel-placeholder .ph-icon{
+    width:56px; height:56px; border-radius:50%; background:rgba(255,255,255,0.12);
+    display:flex; align-items:center; justify-content:center; font-size:24px;
+  }
+  .carousel-placeholder b{font-family:'Space Grotesk',sans-serif; font-size:15px;}
+  .carousel-placeholder span{font-size:12px; color:#B9C1D6; max-width:220px; line-height:1.5;}
+
+  .carousel-caption{
+    position:absolute; left:0; right:0; bottom:0; padding:18px 20px;
+    background:linear-gradient(to top, rgba(29,43,79,0.88), rgba(29,43,79,0));
+    color:var(--paper); font-family:'Inter',sans-serif;
+  }
+  .carousel-caption b{font-family:'Space Grotesk',sans-serif; font-size:15px; display:block;}
+  .carousel-caption span{font-size:12px; color:#CBD4E6;}
+
+  .carousel-arrow{
+    position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%;
+    background:var(--paper); color:var(--navy); border:1.5px solid var(--line); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; z-index:4;
+  }
+  .carousel-arrow.left{left:14px;}
+  .carousel-arrow.right{right:14px;}
+
+  .carousel-dots{
+    position:absolute; top:16px; left:0; right:0; display:flex; gap:6px; justify-content:center; z-index:4;
+  }
+  .carousel-dots .cdot{
+    width:20px; height:4px; border-radius:2px; background:rgba(255,255,255,0.35); cursor:pointer; transition:background 0.2s;
+  }
+  .carousel-dots .cdot.active{background:var(--yellow);}
+
+  @media (max-width:980px){ .hero-grid{grid-template-columns:1fr;} .hero h1{font-size:38px;} }
+
+  /* ---------- hero right: ID card + status ---------- */
+  .id-card{
+    background:var(--navy); color:var(--paper); border-radius:18px; padding:24px;
+    border:2px solid var(--line); position:relative;
+  }
+  
+  @media (max-width:980px){ .hero-grid{grid-template-columns:1fr;} .hero h1{font-size:38px;} }
+
+  /* ---------- Problems / corkboard ---------- */
+  .section{padding:96px 0;}
+  .section-label{
+    font-size:12.5px; font-weight:700; color:var(--coral); text-transform:uppercase;
+    letter-spacing:0.07em; margin-bottom:10px;
+  }
+  .section-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:44px; gap:24px;}
+  .section-head h2{font-size:32px; line-height:1.15; max-width:520px;}
+  .section-head p{font-size:14.5px; color:var(--navy-soft); max-width:320px; margin:0;}
+
+  .board{
+    background:var(--paper-2); border:2px solid var(--line); border-radius:20px;
+    padding:36px; display:grid; grid-template-columns:repeat(4,1fr); gap:22px;
+  }
+  @media (max-width:980px){ .board{grid-template-columns:repeat(2,1fr);} }
+
+  .pin-card{
+    background:var(--card); border:1.5px solid var(--line); border-radius:12px;
+    padding:20px; position:relative;
+  }
+  .pin-card:nth-child(2){transform:rotate(1.2deg);}
+  .pin-card:nth-child(3){transform:rotate(-1deg);}
+  .pin-card:nth-child(4){transform:rotate(0.8deg);}
+  .pin{
+    width:12px; height:12px; border-radius:50%; background:var(--coral);
+    position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+    box-shadow:0 2px 3px rgba(0,0,0,0.2);
+  }
+  .pin-icon{font-size:24px; margin-bottom:12px;}
+  .pin-card h4{font-size:15.5px; margin-bottom:7px;}
+  .pin-card p{font-size:13px; color:var(--navy-soft); line-height:1.5; margin:0;}
+  
+
+  /* ---------- Stalls ---------- */
+  .how-wrap{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  @media (max-width:980px){ .how-wrap{grid-template-columns:repeat(2,1fr);} }
+  .how-card{
+    background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:24px;
+    position:relative;
+    transition:box-shadwo 0.3s, transform 0.3s ease;
+  }
+  .how-num{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px;
+    width:30px; height:30px; border-radius:9px; background:var(--yellow); color:var(--navy);
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+  }
+  .how-card a {
+    display: block; width: 100%; height: 100%; text-decoration: none; color: inherit;
+  }
+  .how-card h4{font-size:15.5px; margin-bottom:7px;}
+  .how-card p{font-size:13px; color:var(--navy-soft); line-height:1.5; margin:0;}
+  .how-connector{
+    position:absolute; top:29px; left:100%; width:20px; height:2px; background:var(--paper-2);
+  }
+  .how-card:hover {
+    transform: translateY(-3px);
+    box-shadow:0 12px 20px rgba(0,0,0,0.15);
+  }
+
+  .btn-teal{
+    background:var(--teal); color:var(--paper); border:2px solid var(--teal);
+    padding:13px 24px; border-radius:10px; font-weight:700; font-size:14.5px; cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+
+  .pic-card{
+  position:relative;
+  width:100%;
+  height:220px;
+  overflow:hidden;
+  border-radius:10px;
+  padding:0;
+}
+
+.pic-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+  /* ---------- Help / footer ---------- */
+  .help-band{
+    background:var(--paper-2); border-top:2px solid var(--line); border-bottom:2px solid var(--line);
+    padding:56px 0;
+  }
+  .help-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;}
+  @media (max-width:980px){ .help-grid{grid-template-columns:1fr;} }
+  .faq-item{border-bottom:1.5px solid var(--line); padding:14px 0; display:flex; justify-content:space-between; align-items:center; font-size:14.5px; font-weight:500;}
+  .faq-item span.a{color:var(--navy-soft); font-weight:400;}
+
+  footer{padding:30px 0; font-size:13px; color:var(--navy-soft);}
+  .foot-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;}
+
+  .help-bubble{
+    position:fixed; bottom:26px; right:26px; background:var(--navy); color:var(--paper);
+    width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:2px solid var(--line); font-size:20px; cursor:pointer; z-index:10;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12L11 3L20 8L13 17L4 12Z" stroke="#FFC93C" stroke-width="2" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="logo-text">unift</div>
+  </div>
+  <div class="nav-right">
+    <div class="login-menu">
+      <div class="login-btn">Log in <span class="chev">▾</span></div>
+      <div class="login-dropdown">
+        <a class="login-option" href="http://127.0.0.1:5500/unift-student-portal.html">
+          <div class="lo-ic student">S</div>
+          <div class="lo-text"><b>Student</b><span>Order food on campus</span></div>
+        </a>
+        <a class="login-option" href="http://127.0.0.1:5500/unift-runner-portal.html">
+          <div class="lo-ic runner">R</div>
+          <div class="lo-text"><b>Runner</b><span>Deliver, earn between classes</span></div>
+        </a>
+        <a class="login-option" href="http://127.0.0.1:5500/unift-vendor-portal.html">
+          <div class="lo-ic vendor">V</div>
+          <div class="lo-text"><b>Vendor</b><span>Manage your stall on Unift</span></div>
+        </a>
+      </div>
+    </div>
+    <div class="profile-chip">
+      <div class="avatar">M</div>
+      <div>
+        <div>Michael</div>
+        <div class="credit-pill"><span class="dot-g"></span>RM12 credit</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="tag-row">
+        <div class="tag on">● 214 runners online</div>
+        <div class="tag">Campus: UIS</div>
+      </div>
+      <h1>food's here <span class="accent">before</span><br>your lecture is.</h1>
+      <p class="sub">Order from campus eateries, delivered by fellow students walking your way. No car, no hike to the cafeteria, no missed lecture.</p>
+
+      <div class="search-bar">
+        <select>
+          <option>Main cafeteria</option>
+          <option>College blocks</option>
+          <option>Library area</option>
+        </select>
+        <input type="text" placeholder="Search a stall, cuisine, or dish...">
+        <button>Search</button>
+      </div>
+      <div class="hero-hint">Average drop-off time on campus: <b>11 minutes</b></div>
+
+      <div class="cta-row">
+        <a href="http://127.0.0.1:5500/unift-browse-stalls.html"class="btn-primary">Order</a>
+      </div>
+    </div>
+
+    <div style="position:relative;">
+      <div class="runner-carousel" id="runnerCarousel">
+        <div class="carousel-dots" id="carouselDots">
+          <span class="cdot active" onclick="carouselGoTo(0)"></span>
+          <span class="cdot" onclick="carouselGoTo(1)"></span>
+          <span class="cdot" onclick="carouselGoTo(2)"></span>
+          <span class="cdot" onclick="carouselGoTo(3)"></span>
+          <span class="cdot" onclick="carouselGoTo(4)"></span>
+        </div>
+
+        <div class="carousel-track" id="carouselTrack">
+          <div class="carousel-slide">
+            <img src="delivery1.jpg" alt="Runner delivering food">
+          </div>
+
+          <div class="carousel-slide">
+            <img src="delivery2.jpg" alt="Runner delivering food">
+          </div>
+
+          <div class="carousel-slide">
+            <img src="delivery3.jpg" alt="Runner delivering food">
+          </div>
+
+          <div class="carousel-slide">
+            <img src="delivery4.jpg" alt="Runner delivering food">
+          </div>
+
+          <div class="carousel-slide">
+            <img src="delivery5.jpg" alt="Runner delivering food">
+          </div>
+        </div>
+
+        <button class="carousel-arrow left" onclick="carouselNav(-1)" aria-label="Previous image">‹</button>
+        <button class="carousel-arrow right" onclick="carouselNav(1)" aria-label="Next image">›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function(){
+    const totalSlides = 5;
+    let currentIndex = 0;
+    let autoplayTimer = null;
+    const track = document.getElementById('carouselTrack');
+    const dots = document.querySelectorAll('#carouselDots .cdot');
+
+    function render(){
+      track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+    }
+    function goTo(index){
+      currentIndex = (index + totalSlides) % totalSlides;
+      render();
+    }
+    function startAutoplay(){
+      clearInterval(autoplayTimer);
+      autoplayTimer = setInterval(() => goTo(currentIndex + 1), 3000);
+    }
+    // Manual navigation (arrow click) pauses autoplay for 20s, then resumes
+    let resumeTimeout = null;
+    window.carouselNav = function(dir){
+      goTo(currentIndex + dir);
+      clearInterval(autoplayTimer);
+      clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoplay, 10000);
+    };
+    window.carouselGoTo = function(i){
+      goTo(i);
+      clearInterval(autoplayTimer);
+      clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoplay, 10000);
+    };
+
+    render();
+    startAutoplay();
+  })();
+</script>
+<br><br><br><br>
+
+<section class="section" id="stalls" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>STALLS</h2>
+      </div>
+      <div><a href="http://127.0.0.1:5500/unift-browse-stalls.html"><p>more</p></a></div>
+    </div>
+    <div class="how-wrap">
+      <a href="http://127.0.0.1:5500/unift-stall-slicehouse.html">
+        <div class="how-card">
+          <div class="how-num">01</div>
+            <h4>Pizza stall</h4>
+            <div class="pic-card">
+              <img src="pizza.jpg" alt="Delicious pizza">
+            </div>
+        </div>
+      </a>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <h4>Burger stall</h4>
+          <div class="pic-card">
+            <img src="burger.jpg" alt="Juicy burger">
+          </div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+          <h4>Salad stall</h4>
+          <div class="pic-card">
+            <img src="salad.jpg" alt="Fresh salad">
+          </div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">04</div>
+          <h4>Pasta stall</h4>
+          <div class="pic-card">
+            <img src="pasta.jpg" alt="Delicious pasta">
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="help-band" id="help">
+  <div class="wrap help-grid">
+    <div>
+      <div class="section-label">help, quick</div>
+      <h2 style="font-size:28px; margin-bottom:10px;">Answers before you have to ask.</h2>
+    </div>
+    <div>
+      <div class="faq-item"><span class="q">Is my food actually hot on arrival?</span><span class="a">Insulated bags, yes</span></div>
+      <div class="faq-item"><span class="q">Can I pay with student e-wallet?</span><span class="a">Yes, and cash</span></div>
+      <div class="faq-item"><span class="q">What if my runner is late?</span><span class="a">Auto credit refund</span></div>
+      <div class="faq-item"><span class="q">How do vendors get paid out?</span><span class="a">Daily, to your account</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>© 2026 Unift. Built by students, run by students.</span>
+    <span>UIS top student</span>
+  </div>
+</footer>
+
+<a class="help-bubble" href="unift-help.html">?</a>
+
+</body>
+</html>

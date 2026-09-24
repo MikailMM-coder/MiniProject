@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unift — Pizza Stall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3E8;
+    --paper-2:#EFE9D6;
+    --navy:#1D2B4F;
+    --navy-soft:#5B6478;
+    --card:#FFFFFF;
+    --yellow:#FFC93C;
+    --yellow-dark:#B87F00;
+    --green:#2F9C63;
+    --green-bg:#E3F3E9;
+    --coral:#E8562F;
+    --coral-bg:#FCE7DF;
+    --teal:#0F6E56;
+    --teal-bg:#E1F1EC;
+    --line:#1D2B4F;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper-2); color:var(--navy);
+    font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif; margin:0;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:'Inter',sans-serif;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    background:var(--navy); color:var(--paper); padding:14px 32px;
+    display:flex; align-items:center; gap:10px; font-size:13.5px;
+  }
+  .topbar a{color:#B9C1D6; font-weight:600;}
+  .topbar .crumb-sep{color:#5A6890;}
+  .topbar .crumb-now{color:var(--paper); font-weight:700;}
+
+  /* ---------- Stall header ---------- */
+  .stall-hero{
+    background:var(--navy); color:var(--paper);
+    padding:0 0 34px;
+  }
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 32px;}
+  .cover{
+    height:240px; border-radius:0; margin:0 -32px 0;
+    background-image:url("pizza-banner.avif");
+    background-size:cover; background-position:center; position:relative; overflow:hidden;
+    z-index:0;
+  }
+  .cover-fade{position:absolute; inset:0; background:linear-gradient(to top, var(--navy), rgba(29,43,79,0));}
+
+  .stall-id{
+    display:flex; align-items:flex-end; gap:20px; margin-top:-46px; padding:0 4px; position:relative; z-index:2;
+  }
+  .stall-logo{
+    width:92px; height:92px; border-radius:18px; background:var(--yellow); color:var(--navy);
+    display:flex; align-items:center; justify-content:center; font-size:38px;
+    border:4px solid var(--navy); flex-shrink:0;
+  }
+  .stall-logo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  border-radius:18px;
+}
+  .stall-meta{padding-bottom:6px;}
+  .stall-meta h1{font-size:28px;}
+  .stall-meta .sub{font-size:13.5px; color:#B9C1D6; margin-top:4px;}
+  .stall-tags{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+  .tag{
+    font-size:12px; font-weight:600; padding:5px 12px; border-radius:999px; border:1.5px solid #3A4A72;
+    color:#D6DCEA;
+  }
+  .tag.on{background:var(--green-bg); border-color:var(--green); color:#1D6B3F;}
+
+  /* ---------- Layout ---------- */
+  .layout{
+    max-width:1080px; margin:0 auto; padding:28px 32px 100px;
+    display:grid; grid-template-columns:1fr 340px; gap:28px; align-items:start;
+  }
+  @media (max-width:880px){ .layout{grid-template-columns:1fr;} }
+
+  .cat-nav{
+    display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap; position:sticky; top:0;
+    background:var(--paper-2); padding:10px 0; z-index:5;
+  }
+  .cat-btn{
+    background:var(--card); border:1.5px solid var(--line); border-radius:999px;
+    padding:9px 16px; font-size:13px; font-weight:600; cursor:pointer; color:var(--navy);
+  }
+  .cat-btn.active{background:var(--navy); color:var(--paper);}
+
+  .menu-section{margin-bottom:34px;}
+  .menu-section h2{font-size:19px; margin-bottom:4px;}
+  .menu-section .section-sub{font-size:12.5px; color:var(--navy-soft); margin-bottom:16px;}
+
+  .item-card{
+    background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:18px;
+    display:flex; gap:16px; margin-bottom:14px; align-items:center;
+  }
+  .item-thumb{
+    width:76px; height:76px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    font-size:30px; background:var(--coral-bg);
+  }
+  .item-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  border-radius:12px;
+}
+  .item-info{flex:1; min-width:0;}
+  .item-info .item-top{display:flex; justify-content:space-between; gap:10px; align-items:flex-start;}
+  .item-info h4{font-size:15px;}
+  .item-info p{font-size:12.5px; color:var(--navy-soft); margin:5px 0 0; line-height:1.5;}
+  .item-price{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:14.5px; white-space:nowrap;}
+  .item-badge{
+    font-size:10.5px; font-weight:700; color:var(--yellow-dark); background:#FFF3D6; padding:2px 8px;
+    border-radius:999px; margin-left:8px;
+  }
+
+  .item-controls{display:flex; align-items:center; justify-content:flex-end; margin-top:12px;}
+  .btn-add{
+    background:var(--navy); color:var(--paper); border:none; border-radius:9px;
+    padding:9px 18px; font-weight:700; font-size:13px; cursor:pointer;
+  }
+  .btn-add:active{transform:scale(0.97);}
+  .qty-stepper{
+    display:flex; align-items:center; gap:0; background:var(--paper-2); border-radius:9px; overflow:hidden;
+  }
+  .qty-stepper button{
+    width:34px; height:34px; border:none; background:transparent; font-size:16px; font-weight:700; cursor:pointer; color:var(--navy);
+  }
+  .qty-stepper button:hover{background:var(--paper);}
+  .qty-stepper .qty-val{width:26px; text-align:center; font-weight:700; font-size:13.5px;}
+
+  /* ---------- Cart ---------- */
+  .cart-panel{
+    background:var(--card); border:1.5px solid var(--line); border-radius:16px; padding:22px;
+    position:sticky; top:76px;
+  }
+  .cart-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;}
+  .cart-head h3{font-size:16px;}
+  .cart-count{
+    background:var(--coral); color:var(--paper); font-size:11px; font-weight:700;
+    padding:2px 9px; border-radius:999px;
+  }
+  .cart-empty{
+    text-align:center; padding:30px 10px; color:var(--navy-soft); font-size:13px;
+  }
+  .cart-empty .ce-icon{font-size:26px; margin-bottom:8px;}
+
+  .cart-line{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+    padding:10px 0; border-bottom:1px solid var(--paper-2); font-size:13px;
+  }
+  .cart-line .cl-name{font-weight:600;}
+  .cart-line .cl-meta{color:var(--navy-soft); font-size:11.5px; margin-top:2px;}
+  .cart-line .cl-right{text-align:right; flex-shrink:0;}
+  .cart-line .cl-price{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px;}
+  .cl-remove{
+    border:none; background:transparent; color:var(--coral); font-size:11px; font-weight:700; cursor:pointer;
+    padding:2px 0; margin-top:4px;
+  }
+
+  .cart-rows{max-height:280px; overflow-y:auto; margin-bottom:6px;}
+
+  .cart-sum-row{display:flex; justify-content:space-between; font-size:13px; color:var(--navy-soft); padding:6px 0;}
+  .cart-sum-row.total{
+    font-size:15px; font-weight:700; color:var(--navy); border-top:1.5px dashed var(--paper-2);
+    padding-top:12px; margin-top:6px;
+  }
+
+  .drop-select{
+    width:100%; border:1.5px solid var(--line); border-radius:9px; padding:10px 12px;
+    font-family:'Inter',sans-serif; font-size:13px; color:var(--navy); background:var(--paper); margin:14px 0 4px;
+  }
+  .btn-checkout{
+    width:100%; background:var(--coral); color:var(--paper); border:none; border-radius:10px;
+    padding:14px; font-weight:700; font-size:14.5px; cursor:pointer; margin-top:12px;
+  }
+  .btn-checkout:disabled{background:#D8D2C2; color:#8A8370; cursor:not-allowed;}
+  .btn-checkout:not(:disabled):active{transform:scale(0.98);}
+
+  .checkout-note{font-size:11.5px; color:var(--navy-soft); text-align:center; margin-top:10px;}
+
+  /* Toast */
+  .toast{
+    position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--navy); color:var(--paper); padding:12px 22px; border-radius:999px;
+    font-size:13.5px; font-weight:600; opacity:0; pointer-events:none; transition:all 0.25s ease;
+    display:flex; align-items:center; gap:8px; z-index:50; border:1.5px solid var(--line);
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .toast .t-dot{width:7px; height:7px; border-radius:50%; background:var(--green);}
+
+  /* Confirmation overlay */
+  .overlay{
+    position:fixed; inset:0; background:rgba(29,43,79,0.55); display:none;
+    align-items:center; justify-content:center; z-index:60; padding:20px;
+  }
+  .overlay.show{display:flex;}
+  .confirm-card{
+    background:var(--card); border-radius:18px; padding:34px 30px; max-width:360px; width:100%;
+    text-align:center; border:2px solid var(--line);
+  }
+  .confirm-card .cc-icon{
+    width:56px; height:56px; border-radius:50%; background:var(--green-bg); color:#1D6B3F;
+    display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 16px;
+  }
+  .confirm-card h3{font-size:19px; margin-bottom:8px;}
+  .confirm-card p{font-size:13.5px; color:var(--navy-soft); margin:0 0 22px; line-height:1.5;}
+  .confirm-order-id{font-family:'IBM Plex Mono', monospace; font-size:12.5px; background:var(--paper-2); padding:8px 14px; border-radius:8px; display:inline-block; margin-bottom:20px;}
+  .btn-track{
+    background:var(--navy); color:var(--paper); border:none; border-radius:10px; padding:12px 22px;
+    font-weight:700; font-size:13.5px; cursor:pointer; width:100%;
+  }
+  .btn-close{
+    background:transparent; border:none; color:var(--navy-soft); font-size:12.5px; font-weight:600;
+    cursor:pointer; margin-top:10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="unift.html">Unift</a>
+  <span class="crumb-sep">/</span>
+  <a href="http://127.0.0.1:5500/unift-browse-stalls.html">Browse stalls</a>
+  <span class="crumb-sep">/</span>
+  <span class="crumb-now">Pizza Stall</span>
+</div>
+
+<div class="stall-hero">
+  <div class="wrap">
+    <div class="cover"><div class="cover-fade"></div></div>
+    <div class="stall-id">
+      <div class="stall-logo">
+        <img src="pizza.jpg" alt="Pizza Stall Logo" />
+      </div>
+      <div class="stall-meta">
+        <h1>Pizza Stall</h1>
+        <div class="sub">Main cafeteria, Lot 7 · New York &amp; personal-size pizzas</div>
+        <div class="stall-tags">
+          <span class="tag on">● Open now</span>
+          <span class="tag">4.7 ★ (312)</span>
+          <span class="tag">~9 min prep</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div>
+    <div class="cat-nav">
+      <button class="cat-btn active" onclick="scrollToCat('pizzas', this)">Pizzas</button>
+      <button class="cat-btn" onclick="scrollToCat('sides', this)">Sides</button>
+      <button class="cat-btn" onclick="scrollToCat('drinks', this)">Drinks</button>
+    </div>
+
+    <div class="menu-section" id="pizzas">
+      <h2>Pizzas</h2>
+      <div class="section-sub">Personal 8" size, baked to order</div>
+
+      <div class="item-card" data-id="margherita" data-name="Margherita" data-price="9.90">
+        <div class="item-thumb">
+          <img src="magherita.jpg" alt="Margherita Pizza" />
+        </div>
+        <div class="item-info">
+          <div class="item-top">
+            <h4>Margherita <span class="item-badge">Popular</span></h4>
+            <div class="item-price">RM 9.90</div>
+          </div>
+          <p>Tomato base, mozzarella, fresh basil.</p>
+          <div class="item-controls"><button class="btn-add" onclick="addItem(this)">Add</button></div>
+        </div>
+      </div>
+
+      <div class="item-card" data-id="pepperoni" data-name="Pepperoni" data-price="11.50">
+        <div class="item-thumb">
+          <img src="pepperoni.jpg" alt="Pepperoni Pizza" />
+        </div>
+        <div class="item-info">
+          <div class="item-top">
+            <h4>Pepperoni</h4>
+            <div class="item-price">RM 11.50</div>
+          </div>
+          <p>Double pepperoni, mozzarella, oregano.</p>
+          <div class="item-controls"><button class="btn-add" onclick="addItem(this)">Add</button></div>
+        </div>
+      </div>
+
+      <div class="item-card" data-id="bbqchicken" data-name="BBQ Chicken" data-price="12.90">
+        <div class="item-thumb">
+          <img src="chickenpizza.jpg" alt="BBQ Chicken Pizza" />
+        </div>
+        <div class="item-info">
+          <div class="item-top">
+            <h4>BBQ Chicken</h4>
+            <div class="item-price">RM 12.90</div>
+          </div>
+          <p>Grilled chicken, smoky BBQ base, red onion.</p>
+          <div class="item-controls"><button class="btn-add" onclick="addItem(this)">Add</button></div>
+        </div>
+      </div>
+
+      <div class="item-card" data-id="veggie" data-name="Garden Veggie" data-price="10.50">
+        <div class="item-thumb">
+          <img src="veggie-pizza.jpg" alt="Garden Veggie Pizza" />
+        </div>
+        <div class="item-info">
+          <div class="item-top">
+            <h4>Garden Veggie</h4>
+            <div class="item-price">RM 10.50</div>
+          </div>
+          <p>Bell pepper, mushroom, corn, black olives.</p>
+          <div class="item-controls"><button class="btn-add" onclick="addItem(this)">Add</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-section" id="sides">
+      <h2>Sides</h2>
+      <div class="section-sub">Goes fast during lunch rush</div>
+
+      <div class="item-card" data-id="garlicbread" data-name="Garlic Bread" data-price="4.50">
+        <div class="item-thumb">
+          <img src="bread.jpg" alt="Garlic Bread" />
+        </div>
+        <div class="item-info">
+          <div class="item-top">
+            <h4>Garlic Bread (4 pcs)</h4>
+            <div class="item-price">RM 4.50</div>
+          </div>
+          <p>Butter, garlic, parsley, toasted.</p>
+          <div class="item-controls"><button class="btn-add" onclick="addItem(this)">Add</button></div>
+        </div>
+      </div>
+
+      <div class="item-card" data-id="wings" data-name="Spicy Wings" data-price="7.90">
+        <div class="item-thumb">
+          <img src="chicken.jpg" alt="Spicy Wings" />
+        </div>
+        <div class="item-info">
+          <div class="item-top">
+            <h4>Spicy Wings (6 pcs)</h4>
+            <div class="item-price">RM 7.90</div>
+          </div>
+          <p>Tossed in house hot sauce, ranch on the side.</p>
+          <div class="item-controls"><button class="btn-add" onclick="addItem(this)">Add</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-section" id="drinks">
+      <h2>Drinks</h2>
+      <div class="section-sub">Ice-cold, straight from the chiller</div>
+
+      <div class="item-card" data-id="cola" data-name="Iced Cola" data-price="2.50">
+        <div class="item-thumb">
+          <img src="cola.jpg" alt="Iced Cola" />
+        </div>
+        <div class="item-info">
+          <div class="item-top">
+            <h4>Iced Cola</h4>
+            <div class="item-price">RM 2.50</div>
+          </div>
+          <p>500ml, extra ice on request.</p>
+          <div class="item-controls"><button class="btn-add" onclick="addItem(this)">Add</button></div>
+        </div>
+      </div>
+
+      <div class="item-card" data-id="lemontea" data-name="Iced Lemon Tea" data-price="2.80">
+        <div class="item-thumb">
+          <img src="lemontea.jpg" alt="Iced Lemon Tea" />
+        </div>
+        <div class="item-info">
+          <div class="item-top">
+            <h4>Iced Lemon Tea</h4>
+            <div class="item-price">RM 2.80</div>
+          </div>
+          <p>House-brewed, lightly sweet.</p>
+          <div class="item-controls"><button class="btn-add" onclick="addItem(this)">Add</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="cart-panel">
+    <div class="cart-head">
+      <h3>Your order</h3>
+      <span class="cart-count" id="cartCount">0 items</span>
+    </div>
+
+    <div id="cartEmpty" class="cart-empty">
+      <div class="ce-icon">🛒</div>
+      Nothing in your cart yet.<br>Add a pizza to get started.
+    </div>
+
+    <div class="cart-rows" id="cartRows"></div>
+
+    <div id="cartSummary" style="display:none;">
+      <div class="cart-sum-row"><span>Subtotal</span><span id="sumSubtotal">RM 0.00</span></div>
+      <div class="cart-sum-row"><span>Delivery fee</span><span id="sumDelivery">RM 2.00</span></div>
+      <div class="cart-sum-row total"><span>Total</span><span id="sumTotal">RM 0.00</span></div>
+
+      <select class="drop-select" id="dropoff">
+        <option value="">Deliver to...</option>
+        <option>Block C, Room 214</option>
+        <option>Library, Level 3</option>
+        <option>College Block D lobby</option>
+        <option>Main hostel gate</option>
+      </select>
+    </div>
+
+    <button class="btn-checkout" id="checkoutBtn" disabled onclick="checkout()">Add items to order</button>
+    <div class="checkout-note">Pay with Unift wallet credit or cash on delivery</div>
+  </aside>
+</div>
+
+<div class="toast" id="toast"><span class="t-dot"></span><span id="toastText">Added to cart</span></div>
+
+<div class="overlay" id="overlay">
+  <div class="confirm-card">
+    <div class="cc-icon">✓</div>
+    <h3>Order placed!</h3>
+    <p>Pizza Stall has your order and is firing up the oven. You'll get a runner assigned shortly.</p>
+    <div class="confirm-order-id" id="orderId">#UN0000</div>
+    <button class="btn-track" onclick="closeOverlay()">Back to menu</button>
+    <button class="btn-close" onclick="closeOverlay()">Close</button>
+  </div>
+</div>
+
+<script>
+  const cart = {}; // id -> { name, price, qty }
+  const DELIVERY_FEE = 2.00;
+
+  function fmt(n){ return 'RM ' + n.toFixed(2); }
+
+  function scrollToCat(id, btn){
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(id).scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  function addItem(btn){
+    const card = btn.closest('.item-card');
+    const id = card.dataset.id;
+    const name = card.dataset.name;
+    const price = parseFloat(card.dataset.price);
+
+    if(!cart[id]){
+      cart[id] = { name, price, qty: 1 };
+    } else {
+      cart[id].qty += 1;
+    }
+    renderCard(card, id);
+    renderCart();
+    showToast(name + ' added');
+  }
+
+  function changeQty(id, delta){
+    if(!cart[id]) return;
+    cart[id].qty += delta;
+    if(cart[id].qty <= 0) delete cart[id];
+    const card = document.querySelector('.item-card[data-id="'+id+'"]');
+    renderCard(card, id);
+    renderCart();
+  }
+
+  function renderCard(card, id){
+    const controls = card.querySelector('.item-controls');
+    if(cart[id]){
+      controls.innerHTML =
+        '<div class="qty-stepper">' +
+          '<button onclick="changeQty(\''+id+'\', -1)">−</button>' +
+          '<span class="qty-val">'+cart[id].qty+'</span>' +
+          '<button onclick="changeQty(\''+id+'\', 1)">+</button>' +
+        '</div>';
+    } else {
+      controls.innerHTML = '<button class="btn-add" onclick="addItem(this)">Add</button>';
+    }
+  }
+
+  function removeLine(id){
+    delete cart[id];
+    const card = document.querySelector('.item-card[data-id="'+id+'"]');
+    if(card) renderCard(card, id);
+    renderCart();
+  }
+
+  function renderCart(){
+    const ids = Object.keys(cart);
+    const rows = document.getElementById('cartRows');
+    const empty = document.getElementById('cartEmpty');
+    const summary = document.getElementById('cartSummary');
+    const countEl = document.getElementById('cartCount');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+
+    const totalItems = ids.reduce((s,id) => s + cart[id].qty, 0);
+    countEl.textContent = totalItems + (totalItems === 1 ? ' item' : ' items');
+
+    if(ids.length === 0){
+      empty.style.display = 'block';
+      summary.style.display = 'none';
+      rows.innerHTML = '';
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = 'Add items to order';
+      return;
+    }
+
+    empty.style.display = 'none';
+    summary.style.display = 'block';
+
+    rows.innerHTML = ids.map(id => {
+      const line = cart[id];
+      const lineTotal = line.price * line.qty;
+      return '<div class="cart-line">' +
+        '<div>' +
+          '<div class="cl-name">'+line.name+'</div>' +
+          '<div class="cl-meta">Qty '+line.qty+' · '+fmt(line.price)+' each</div>' +
+        '</div>' +
+        '<div class="cl-right">' +
+          '<div class="cl-price">'+fmt(lineTotal)+'</div>' +
+          '<button class="cl-remove" onclick="removeLine(\''+id+'\')">Remove</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    const subtotal = ids.reduce((s,id) => s + cart[id].price * cart[id].qty, 0);
+    const total = subtotal + DELIVERY_FEE;
+    document.getElementById('sumSubtotal').textContent = fmt(subtotal);
+    document.getElementById('sumDelivery').textContent = fmt(DELIVERY_FEE);
+    document.getElementById('sumTotal').textContent = fmt(total);
+
+    checkoutBtn.disabled = false;
+    checkoutBtn.textContent = 'Place order · ' + fmt(total);
+  }
+
+  let toastTimer;
+  function showToast(text){
+    const toast = document.getElementById('toast');
+    document.getElementById('toastText').textContent = text;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  function checkout(){
+    const dropoff = document.getElementById('dropoff');
+    if(!dropoff.value){
+      dropoff.style.borderColor = 'var(--coral)';
+      showToast('Pick a drop-off location first');
+      dropoff.focus();
+      return;
+    }
+    const orderNum = Math.floor(2200 + Math.random() * 300);
+    document.getElementById('orderId').textContent = '#UN' + orderNum;
+    document.getElementById('overlay').classList.add('show');
+  }
+
+  function closeOverlay(){
+    document.getElementById('overlay').classList.remove('show');
+    // reset cart for a fresh order
+    Object.keys(cart).forEach(id => delete cart[id]);
+    document.querySelectorAll('.item-card').forEach(card => renderCard(card, card.dataset.id));
+    renderCart();
+    document.getElementById('dropoff').value = '';
+    document.getElementById('dropoff').style.borderColor = 'var(--line)';
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  renderCart();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unift — Browse Stalls</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3E8;
+    --paper-2:#EFE9D6;
+    --navy:#1D2B4F;
+    --navy-soft:#5B6478;
+    --card:#FFFFFF;
+    --yellow:#FFC93C;
+    --yellow-dark:#B87F00;
+    --green:#2F9C63;
+    --green-bg:#E3F3E9;
+    --coral:#E8562F;
+    --coral-bg:#FCE7DF;
+    --teal:#0F6E56;
+    --teal-bg:#E1F1EC;
+    --line:#1D2B4F;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper-2); color:var(--navy);
+    font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif; margin:0;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:'Inter',sans-serif;}
+
+  .shell{display:grid; grid-template-columns:250px 1fr; min-height:100vh;}
+
+  /* ---------- Sidebar (shared with the rest of the student portal) ---------- */
+  .sidebar{
+    background:var(--navy); color:var(--paper); padding:26px 20px;
+    display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
+  }
+  .logo{display:flex; align-items:center; gap:9px; margin-bottom:34px; padding:0 4px;}
+  .logo-mark{
+    width:32px; height:32px; border-radius:9px; background:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .logo-mark svg{width:17px; height:17px;}
+  .logo-text{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px;}
+  .logo-tag{font-size:10.5px; color:#A7B0C4; margin-left:4px;}
+
+  .nav-group{margin-bottom:26px;}
+  .nav-label{font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:#7C87A3; padding:0 12px; margin-bottom:8px;}
+  .nav-item{
+    display:flex; align-items:center; gap:11px; padding:10px 12px; border-radius:10px;
+    font-size:14px; font-weight:500; color:#C5CCDD; cursor:pointer; margin-bottom:2px;
+  }
+  .nav-item .ic{width:18px; text-align:center; font-size:14px;}
+  .nav-item.active{background:#2A3B66; color:var(--paper); font-weight:600;}
+  .nav-item.active .ic{color:var(--yellow);}
+  .nav-item .badge{
+    margin-left:auto; background:var(--yellow); color:var(--navy); font-size:10.5px;
+    font-weight:700; padding:1px 7px; border-radius:999px;
+  }
+
+  .sidebar-bottom{margin-top:auto; padding-top:16px; border-top:1px solid #33436C;}
+  .side-profile{display:flex; align-items:center; gap:10px; padding:8px 4px;}
+  .side-avatar{
+    width:36px; height:36px; border-radius:50%; background:var(--yellow); color:var(--navy);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0;
+  }
+  .side-name{font-size:13.5px; font-weight:600;}
+  .side-role{font-size:11.5px; color:#A7B0C4;}
+
+  /* ---------- Main ---------- */
+  main{padding:30px 40px 60px;}
+  .topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; gap:24px;}
+  .topbar h1{font-size:24px;}
+  .topbar p{margin:4px 0 0; font-size:13.5px; color:var(--navy-soft);}
+
+  .wallet-chip{
+    display:flex; align-items:center; gap:14px; background:var(--card); border:1.5px solid var(--line);
+    border-radius:999px; padding:8px 18px 8px 8px; flex-shrink:0;
+  }
+  .wallet-ic{
+    width:32px; height:32px; border-radius:50%; background:var(--green-bg); color:#1D6B3F;
+    display:flex; align-items:center; justify-content:center; font-size:15px;
+  }
+  .wallet-chip b{font-size:14.5px; display:block; font-family:'Space Grotesk',sans-serif;}
+  .wallet-chip span{font-size:11px; color:var(--navy-soft);}
+
+  .search-bar{
+    display:flex; align-items:center; gap:0; background:var(--card);
+    border:2px solid var(--line); border-radius:14px; padding:6px; margin-bottom:18px; max-width:560px;
+  }
+  .search-bar select, .search-bar input{
+    border:none; outline:none; background:transparent; font-family:'Inter',sans-serif;
+    font-size:14px; color:var(--navy); padding:10px 12px;
+  }
+  .search-bar select{border-right:1.5px solid var(--paper-2); font-weight:600; max-width:150px;}
+  .search-bar input{flex:1;}
+  .search-bar .search-clear{
+    border:none; background:transparent; color:var(--navy-soft); font-size:13px; cursor:pointer; padding:10px 12px; display:none;
+  }
+
+  .cat-row{display:flex; gap:9px; margin-bottom:22px; flex-wrap:wrap;}
+  .cat-chip{
+    background:var(--card); border:1.5px solid var(--line); border-radius:999px;
+    padding:9px 16px; font-size:13px; font-weight:600; cursor:pointer; color:var(--navy);
+    display:flex; align-items:center; gap:6px;
+  }
+  .cat-chip.active{background:var(--navy); color:var(--paper);}
+  .cat-chip .cc-count{
+    font-size:10.5px; background:rgba(0,0,0,0.08); padding:1px 6px; border-radius:999px;
+  }
+  .cat-chip.active .cc-count{background:rgba(255,255,255,0.18);}
+
+  .result-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;}
+  .result-count{font-size:12.5px; color:var(--navy-soft); font-weight:500;}
+
+  .stall-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  @media (max-width:1150px){ .stall-grid{grid-template-columns:repeat(2,1fr);} }
+
+  .stall-card{
+    background:var(--card); border:1.5px solid var(--line); border-radius:16px; overflow:hidden;
+    display:flex; flex-direction:column; transition:transform 0.15s ease;
+  }
+  .sc-cover{
+    height:108px; position:relative; display:flex; align-items:center; justify-content:center; font-size:38px;
+  }
+
+  .sc-cover img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+  .sc-fav{
+    position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%;
+    background:rgba(255,255,255,0.9); border:none; cursor:pointer; font-size:14px;
+    display:flex; align-items:center; justify-content:center; color:var(--navy-soft);
+  }
+  .sc-fav.active{color:var(--coral);}
+  .sc-status{
+    position:absolute; bottom:10px; left:10px; font-size:10.5px; font-weight:700; padding:3px 9px;
+    border-radius:999px; display:flex; align-items:center; gap:5px;
+  }
+  .sc-status.open{background:var(--green-bg); color:#1D6B3F;}
+  .sc-status.closed{background:#EFE9E0; color:var(--navy-soft);}
+  .sc-status .d{width:6px; height:6px; border-radius:50%; background:currentColor;}
+
+  .sc-body{padding:14px 16px 16px; display:flex; flex-direction:column; flex:1;}
+  .sc-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:4px;}
+  .sc-body h4{font-size:15px;}
+  .sc-rating{font-size:12px; font-weight:700; color:var(--yellow-dark); white-space:nowrap;}
+  .sc-tags{font-size:12px; color:var(--navy-soft); margin-bottom:10px;}
+  .sc-meta{display:flex; gap:12px; font-size:11.5px; color:var(--navy-soft); margin-bottom:14px;}
+  .sc-meta span{display:flex; align-items:center; gap:4px;}
+
+  .btn-view{
+    margin-top:auto; background:var(--navy); color:var(--paper); border:none; border-radius:9px;
+    padding:10px; font-weight:700; font-size:13px; cursor:pointer; text-align:center;
+  }
+  .btn-view:disabled{background:#D8D2C2; color:#8A8370; cursor:not-allowed;}
+
+  .no-results{
+    grid-column:1 / -1; text-align:center; padding:60px 20px; color:var(--navy-soft);
+  }
+  .no-results .nr-icon{font-size:30px; margin-bottom:10px;}
+  .no-results b{color:var(--navy); display:block; margin-bottom:6px; font-size:15px;}
+  .btn-reset{
+    margin-top:14px; background:var(--card); border:1.5px solid var(--line); border-radius:9px;
+    padding:9px 18px; font-weight:600; font-size:13px; cursor:pointer;
+  }
+
+  .toast{
+    position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--navy); color:var(--paper); padding:11px 20px; border-radius:999px;
+    font-size:13px; font-weight:600; opacity:0; pointer-events:none; transition:all 0.25s ease; z-index:50;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12L11 3L20 8L13 17L4 12Z" stroke="#1D2B4F" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div><span class="logo-text">unift</span><span class="logo-tag">student</span></div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Order</div>
+      <a href="unift-student-portal.html" class="nav-item" style="text-decoration:none;"><span class="ic">◆</span>Home</a>
+      <div class="nav-item active"><span class="ic">◉</span>Browse stalls</div>
+      <div class="nav-item"><span class="ic">▤</span>Track order<span class="badge">1</span></div>
+      <div class="nav-item"><span class="ic">↻</span>Order history</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Account</div>
+      <div class="nav-item"><span class="ic">◈</span>Wallet & credit</div>
+      <div class="nav-item"><span class="ic">✎</span>Profile</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Support</div>
+      <a href="unift-help.html" class="nav-item"><span class="ic">?</span>Help</a>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="side-profile">
+        <div class="side-avatar">M</div>
+        <div>
+          <div class="side-name">Michael</div>
+          <div class="side-role">Year 1 · UIS</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>Browse stalls</h1>
+        <p>Every eatery open on your campus right now.</p>
+      </div>
+      <div class="wallet-chip">
+        <div class="wallet-ic">◈</div>
+        <div>
+          <b>RM 6.7m</b>
+          <span>Wallet credit</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <select id="areaFilter">
+        <option value="">All areas</option>
+        <option>Main cafeteria</option>
+        <option>College blocks</option>
+        <option>Library area</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="Search a stall, cuisine, or dish...">
+      <button class="search-clear" id="clearBtn" onclick="clearSearch()">✕</button>
+    </div>
+
+    <div class="cat-row" id="catRow">
+      <div class="cat-chip active" data-cat="all" onclick="setCategory(this)">All stalls <span class="cc-count" id="count-all">0</span></div>
+      <div class="cat-chip" data-cat="rice" onclick="setCategory(this)">Rice &amp; malay <span class="cc-count" id="count-rice">0</span></div>
+      <div class="cat-chip" data-cat="noodles" onclick="setCategory(this)">Noodles <span class="cc-count" id="count-noodles">0</span></div>
+      <div class="cat-chip" data-cat="pizza" onclick="setCategory(this)">Pizza &amp; western <span class="cc-count" id="count-pizza">0</span></div>
+      <div class="cat-chip" data-cat="drinks" onclick="setCategory(this)">Drinks &amp; snacks <span class="cc-count" id="count-drinks">0</span></div>
+    </div>
+
+    <div class="result-row">
+      <span class="result-count" id="resultCount">8 stalls</span>
+    </div>
+
+    <div class="stall-grid" id="stallGrid">
+
+      <div class="stall-card" data-cat="pizza" data-name="Slice House" data-tags="pizza western pepperoni margherita" data-open="1" data-area="Main cafeteria">
+        <div class="sc-cover">
+          <img src="pizza.jpg" alt="Slice House Pizza" />
+          <button class="sc-fav" onclick="toggleFav(this)">♥</button>
+          <span class="sc-status open"><span class="d"></span>Open</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-top"><h4>Pizza Stall</h4><span class="sc-rating">★ 4.7</span></div>
+          <div class="sc-tags">Pizza · Personal-size, baked to order</div>
+          <div class="sc-meta"><span>⏱ 9 min</span><span>📍 Main cafeteria</span></div>
+          <a href="unift-stall-slicehouse.html" class="btn-view">View menu</a>
+        </div>
+      </div>
+
+      <div class="stall-card" data-cat="noodles" data-name="Jamal Kopitiam" data-tags="noodles hor fun soup kopitiam" data-open="0" data-area="Main cafeteria">
+        <div class="sc-cover" style="background:var(--teal-bg); opacity:0.7">
+          <img src="Noodle.jpg" alt="Jamal Kopitiam Noodles" />
+          <button class="sc-fav" onclick="toggleFav(this)">♥</button>
+          <span class="sc-status closed"><span class="d"></span>Closed</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-top"><h4>Jamal Kopitiam</h4><span class="sc-rating">★ 4.7</span></div>
+          <div class="sc-tags">Noodles · Hor fun, noodle soups</div>
+          <div class="sc-meta"><span>⏱Opens 11am</span><span>📍 Main cafeteria</span></div>
+          <button class="btn-view" disabled>Closed now</button>
+        </div>
+      </div>
+
+      <div class="stall-card" data-cat="Burger" data-name="Burger Stall" data-tags="Burger" data-open="1" data-area="College blocks">
+        <div class="sc-cover" style="background:var(--yellow);">
+          <img src="burger.jpg" alt="Burger Stall" />
+          <button class="sc-fav" onclick="toggleFav(this)">♥</button>
+          <span class="sc-status open"><span class="d"></span>Open</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-top"><h4>Burger Stall</h4><span class="sc-rating">★ 4.9</span></div>
+          <div class="sc-tags">Burger · Beef burgers, chicken burgers</div>
+          <div class="sc-meta"><span>⏱ 14 min</span><span>📍 College blocks</span></div>
+          <button class="btn-view" onclick="notReady('Burger Stall')">View menu</button>
+        </div>
+      </div>
+
+      <div class="stall-card" data-cat="pasta" data-name="pasta stall" data-tags="pasta noodles" data-open="1" data-area="Main cafeteria">
+        <div class="sc-cover" style="background:var(--teal-bg);">
+          <img src="pasta.jpg" alt="pasta stall" />
+          <button class="sc-fav" onclick="toggleFav(this)">♥</button>
+          <span class="sc-status open"><span class="d"></span>Open</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-top"><h4>pasta stall</h4><span class="sc-rating">★ 4.6</span></div>
+          <div class="sc-tags">Pasta · Noodles</div>
+          <div class="sc-meta"><span>⏱ 13 min</span><span>📍 Main cafeteria</span></div>
+          <button class="btn-view" onclick="notReady('pasta stall')">View menu</button>
+        </div>
+      </div>
+
+      <div class="stall-card" data-cat="drinks" data-name="Boba & Co" data-tags="drinks bubble tea milk tea snacks" data-open="1" data-area="Library area">
+        <div class="sc-cover" style="background:var(--coral-bg);">
+          <img src="boba.jpg" alt="Boba & Co" />
+          <button class="sc-fav" onclick="toggleFav(this)">♥</button>
+          <span class="sc-status open"><span class="d"></span>Open</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-top"><h4>Boba &amp; Co</h4><span class="sc-rating">★ 4.5</span></div>
+          <div class="sc-tags">Drinks &amp; snacks · Bubble tea, milk tea</div>
+          <div class="sc-meta"><span>⏱ 6 min</span><span>📍 Library area</span></div>
+          <button class="btn-view" onclick="notReady('Boba & Co')">View menu</button>
+        </div>
+      </div>
+
+      <div class="stall-card" data-cat="salad" data-name="Salad Stall" data-tags="salad vegetables healthy" data-open="1" data-area="Main cafeteria">
+        <div class="sc-cover" style="background:var(--green-bg);">
+          <img src="salad.jpg" alt="Salad Stall" />
+          <button class="sc-fav" onclick="toggleFav(this)">♥</button>
+          <span class="sc-status closed"><span class="d"></span>Closed</span>
+        </div>
+        <div class="sc-body">
+          <div class="sc-top"><h4>Salad Stall</h4><span class="sc-rating">★ 4.4</span></div>
+          <div class="sc-tags">Salad · Vegetables, healthy</div>
+          <div class="sc-meta"><span>⏱ Opens 7am</span><span>📍 College blocks</span></div>
+          <button class="btn-view" disabled>Closed now</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast">Menu coming soon</div>
+
+<script>
+  let activeCat = 'all';
+
+  function updateCounts(){
+    const cards = document.querySelectorAll('.stall-card');
+    const counts = { all: cards.length, rice: 0, noodles: 0, pizza: 0, drinks: 0 };
+    cards.forEach(c => { counts[c.dataset.cat] = (counts[c.dataset.cat] || 0) + 1; });
+    Object.keys(counts).forEach(k => {
+      const el = document.getElementById('count-' + k);
+      if(el) el.textContent = counts[k];
+    });
+  }
+
+  function setCategory(chip){
+    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeCat = chip.dataset.cat;
+    applyFilters();
+  }
+
+  function clearSearch(){
+    document.getElementById('searchInput').value = '';
+    applyFilters();
+  }
+
+  function applyFilters(){
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    const area = document.getElementById('areaFilter').value;
+    document.getElementById('clearBtn').style.display = q ? 'block' : 'none';
+
+    const cards = Array.from(document.querySelectorAll('.stall-card'));
+    let visible = 0;
+
+    cards.forEach(card => {
+      const matchesCat = activeCat === 'all' || card.dataset.cat === activeCat;
+      const matchesArea = !area || card.dataset.area === area;
+      const haystack = (card.dataset.name + ' ' + card.dataset.tags).toLowerCase();
+      const matchesQuery = !q || haystack.includes(q);
+      const show = matchesCat && matchesArea && matchesQuery;
+      card.style.display = show ? 'flex' : 'none';
+      if(show) visible++;
+    });
+
+    document.getElementById('resultCount').textContent = visible + (visible === 1 ? ' stall' : ' stalls');
+
+    const grid = document.getElementById('stallGrid');
+    let noResultsEl = document.getElementById('noResults');
+    if(visible === 0){
+      if(!noResultsEl){
+        noResultsEl = document.createElement('div');
+        noResultsEl.id = 'noResults';
+        noResultsEl.className = 'no-results';
+        noResultsEl.innerHTML = '<div class="nr-icon">🔍</div><b>No stalls match that search</b>Try a different keyword or clear your filters.<br><button class="btn-reset" onclick="resetAll()">Reset filters</button>';
+        grid.appendChild(noResultsEl);
+      }
+    } else if(noResultsEl){
+      noResultsEl.remove();
+    }
+  }
+
+  function resetAll(){
+    document.getElementById('searchInput').value = '';
+    document.getElementById('areaFilter').value = '';
+    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+    document.querySelector('.cat-chip[data-cat="all"]').classList.add('active');
+    activeCat = 'all';
+    applyFilters();
+  }
+
+  function toggleFav(btn){
+    btn.classList.toggle('active');
+    event.stopPropagation();
+  }
+
+  let toastTimer;
+  function notReady(name){
+    const toast = document.getElementById('toast');
+    toast.textContent = name + "'s menu page isn't built yet — try Slice House";
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  document.getElementById('searchInput').addEventListener('input', applyFilters);
+  document.getElementById('areaFilter').addEventListener('change', applyFilters);
+
+  updateCounts();
+  applyFilters();
+</script>
+
+</body>
+</html>

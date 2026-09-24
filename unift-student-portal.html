@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unift Student Portal — Michael</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3E8;
+    --paper-2:#EFE9D6;
+    --navy:#1D2B4F;
+    --navy-soft:#5B6478;
+    --card:#FFFFFF;
+    --yellow:#FFC93C;
+    --yellow-dark:#B87F00;
+    --green:#2F9C63;
+    --green-bg:#E3F3E9;
+    --coral:#E8562F;
+    --coral-bg:#FCE7DF;
+    --teal:#0F6E56;
+    --line:#1D2B4F;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper-2); color:var(--navy);
+    font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif; margin:0;}
+  .note-font{font-family:'Caveat',cursive;}
+
+  .shell{display:grid; grid-template-columns:250px 1fr; min-height:100vh;}
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    background:var(--navy); color:var(--paper); padding:26px 20px;
+    display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
+  }
+  .logo{display:flex; align-items:center; gap:9px; margin-bottom:34px; padding:0 4px;}
+  .logo-mark{
+    width:32px; height:32px; border-radius:9px; background:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .logo-mark svg{width:17px; height:17px;}
+  .logo-text{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px;}
+  .logo-tag{font-size:10.5px; color:#A7B0C4; margin-left:4px;}
+
+  .nav-group{margin-bottom:26px;}
+  .nav-label{font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:#7C87A3; padding:0 12px; margin-bottom:8px;}
+  .nav-item{
+    display:flex; align-items:center; gap:11px; padding:10px 12px; border-radius:10px;
+    font-size:14px; font-weight:500; color:#C5CCDD; cursor:pointer; margin-bottom:2px;
+  }
+  .nav-item .ic{width:18px; text-align:center; font-size:14px;}
+  .nav-item.active{background:#2A3B66; color:var(--paper); font-weight:600;}
+  .nav-item.active .ic{color:var(--yellow);}
+  .nav-item .badge{
+    margin-left:auto; background:var(--yellow); color:var(--navy); font-size:10.5px;
+    font-weight:700; padding:1px 7px; border-radius:999px;
+  }
+
+  .sidebar-bottom{margin-top:auto; padding-top:16px; border-top:1px solid #33436C;}
+  .side-profile{display:flex; align-items:center; gap:10px; padding:8px 4px;}
+  .side-avatar{
+    width:36px; height:36px; border-radius:50%; background:var(--yellow); color:var(--navy);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0;
+  }
+  .side-name{font-size:13.5px; font-weight:600;}
+  .side-role{font-size:11.5px; color:#A7B0C4;}
+
+  /* ---------- Main ---------- */
+  main{padding:30px 40px 60px;}
+  .topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; gap:24px;}
+  .topbar h1{font-size:24px;}
+  .topbar p{margin:4px 0 0; font-size:13.5px; color:var(--navy-soft);}
+
+  .wallet-chip{
+    display:flex; align-items:center; gap:14px; background:var(--card); border:1.5px solid var(--line);
+    border-radius:999px; padding:8px 18px 8px 8px; flex-shrink:0;
+  }
+  .wallet-ic{
+    width:32px; height:32px; border-radius:50%; background:var(--green-bg); color:#1D6B3F;
+    display:flex; align-items:center; justify-content:center; font-size:15px;
+  }
+  .wallet-chip b{font-size:14.5px; display:block; font-family:'Space Grotesk',sans-serif;}
+  .wallet-chip span{font-size:11px; color:var(--navy-soft);}
+
+  .search-bar{
+    display:flex; align-items:center; gap:0; background:var(--card);
+    border:2px solid var(--line); border-radius:14px; padding:6px; margin-bottom:26px; max-width:560px;
+  }
+  .search-bar select, .search-bar input{
+    border:none; outline:none; background:transparent; font-family:'Inter',sans-serif;
+    font-size:14px; color:var(--navy); padding:10px 12px;
+  }
+  .search-bar select{border-right:1.5px solid var(--paper-2); font-weight:600; max-width:140px;}
+  .search-bar input{flex:1;}
+  .search-bar button{
+    background:var(--navy); color:var(--paper); border:none; border-radius:9px;
+    padding:11px 20px; font-weight:600; font-size:14px; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+
+  .grid-2{display:grid; grid-template-columns:0.85fr 1.15fr; gap:22px; margin-bottom:26px;}
+  @media (max-width:1100px){ .grid-2{grid-template-columns:1fr;} }
+
+  .panel{background:var(--card); border:1.5px solid var(--line); border-radius:16px; padding:24px;}
+  .panel-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
+  .panel-head h3{font-size:16px;}
+  .panel-head .count{font-size:12px; color:var(--navy-soft); font-weight:500;}
+  .panel-head a{font-size:12.5px; color:var(--navy-soft); font-weight:600; text-decoration:none;}
+
+  /* Active order card */
+  .active-card{background:var(--navy); color:var(--paper); border-radius:14px; padding:20px;}
+  .active-top{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;}
+  .active-badge{font-size:11px; background:var(--yellow); color:var(--navy); padding:3px 9px; border-radius:6px; font-weight:700;}
+  .active-order{font-size:12px; color:#A7B0C4; margin-bottom:3px;}
+  .active-dish{font-family:'Space Grotesk',sans-serif; font-size:16.5px; font-weight:600;}
+
+  .status-track{display:flex; justify-content:space-between; position:relative; margin:18px 0 8px;}
+  .status-track::before{content:''; position:absolute; top:9px; left:9px; right:9px; height:2px; background:#39456A;}
+  .status-fill{position:absolute; top:9px; left:9px; height:2px; background:var(--yellow); width:64%;}
+  .status-step{display:flex; flex-direction:column; align-items:center; gap:7px; position:relative; z-index:1; width:56px;}
+  .step-dot{width:18px; height:18px; border-radius:50%; background:#39456A; border:2px solid var(--navy);}
+  .step-dot.done{background:var(--yellow);}
+  .step-dot.now{background:var(--yellow); box-shadow:0 0 0 4px rgba(255,201,60,0.25);}
+  .step-label{font-size:10px; color:#A7B0C4; text-align:center;}
+  .step-label.now{color:var(--paper); font-weight:600;}
+
+  .active-footer{display:flex; justify-content:space-between; margin-top:16px; padding-top:14px; border-top:1px dashed #39456A; font-size:12px; color:#A7B0C4;}
+  .active-footer b{color:var(--paper);}
+  .btn-block{
+    width:100%; background:var(--yellow); color:var(--navy); border:none; border-radius:10px;
+    padding:12px; font-weight:700; font-size:13.5px; cursor:pointer; font-family:'Inter',sans-serif; margin-top:14px;
+  }
+
+  /* Stall grid */
+  .stall-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+  .stall-card{
+    border:1.5px solid var(--paper-2); border-radius:12px; padding:16px; display:flex; gap:12px; align-items:center;
+  }
+  .stall-card .s-ic{
+    width:44px; height:44px; border-radius:10px; background:var(--paper-2);
+    display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0;
+  }
+  .stall-card b{font-size:13.5px; display:block; margin-bottom:2px;}
+  .stall-card span{font-size:11.5px; color:var(--navy-soft);}
+  .stall-open{display:flex; align-items:center; gap:5px; font-size:10.5px; color:#1D6B3F; font-weight:600; margin-top:4px;}
+  .stall-open .d{width:6px; height:6px; border-radius:50%; background:var(--green);}
+
+  /* problems row */
+  .board{
+    background:var(--paper-2); border:1.5px solid var(--line); border-radius:16px;
+    padding:22px; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px;
+  }
+  .pin-card{
+    background:var(--card); border:1.5px solid var(--paper-2); border-radius:10px;
+    padding:14px; text-align:center; cursor:pointer;
+  }
+  .pin-icon{font-size:20px; margin-bottom:8px;}
+  .pin-card b{font-size:12.5px; display:block;}
+
+  /* History table */
+  .history-table{width:100%; border-collapse:collapse;}
+  .history-table th{
+    text-align:left; font-size:11.5px; color:var(--navy-soft); text-transform:uppercase;
+    letter-spacing:0.05em; padding:0 12px 10px; font-weight:600;
+  }
+  .history-table td{padding:13px 12px; font-size:13.5px; border-top:1px solid var(--paper-2);}
+  .history-table tr:hover td{background:var(--paper);}
+  .pill{
+    font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; display:inline-block;
+  }
+  .pill.done{background:var(--green-bg); color:#1D6B3F;}
+  .btn-reorder{
+    background:transparent; border:1.5px solid var(--line); border-radius:8px; padding:6px 12px;
+    font-size:12px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+
+  /* help */
+  .help-bubble{
+    position:fixed; bottom:26px; right:26px; background:var(--navy); color:var(--paper);
+    width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:2px solid var(--line); font-size:20px; cursor:pointer; z-index:10;
+  }
+  .help-tip{
+    position:fixed; bottom:88px; right:26px; background:var(--card); border:1.5px solid var(--line);
+    border-radius:12px; padding:10px 14px; font-size:12.5px; max-width:200px; box-shadow:0 6px 0 rgba(0,0,0,0.05);
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12L11 3L20 8L13 17L4 12Z" stroke="#1D2B4F" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div><span class="logo-text">unift</span><span class="logo-tag">student</span></div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Order</div>
+      <div class="nav-item active"><span class="ic">◆</span>Home</div>
+      <a href="unift-browse-stalls.html" class="nav-item" style="text-decoration:none;"><span class="ic">◉</span>Browse stalls</a>
+      <div class="nav-item"><span class="ic">▤</span>Track order<span class="badge">1</span></div>
+      <div class="nav-item"><span class="ic">↻</span>Order history</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Account</div>
+      <div class="nav-item"><span class="ic">◈</span>Wallet & credit</div>
+      <div class="nav-item"><span class="ic">✎</span>Profile</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Support</div>
+      <a href="unift-help.html" class="nav-item"><span class="ic">?</span>Help</a>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="side-profile">
+        <div class="side-avatar">M</div>
+        <div>
+          <div class="side-name">Michael</div>
+          <div class="side-role">Year 1 · UIS</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>Hey Michael, hungry?</h1>
+        <p>Your last order from Song Kee Kopitiam took 11 minutes.</p>
+      </div>
+      <div class="wallet-chip">
+        <div class="wallet-ic">◈</div>
+        <div>
+          <b>RM 12.00</b>
+          <span>Wallet credit</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <select>
+        <option>Main cafeteria</option>
+        <option>College blocks</option>
+        <option>Library area</option>
+      </select>
+      <input type="text" placeholder="Search a stall, cuisine, or dish...">
+      <button>Search</button>
+    </div>
+
+    <div class="board">
+      <div class="pin-card"><div class="pin-icon">📚</div><b>Buried in studying</b></div>
+      <div class="pin-card"><div class="pin-icon">🥱</div><b>Too tired to walk</b></div>
+      <div class="pin-card"><div class="pin-icon">🤒</div><b>Not feeling well</b></div>
+      <div class="pin-card"><div class="pin-icon">⏰</div><b>Assignment due</b></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Your order is on the way</h3>
+        </div>
+
+        <div class="active-card">
+          <div class="active-top">
+            <div>
+              <div class="active-order">Order #UN2281 · to Block C, Room 214</div>
+              <div class="active-dish">Chicken chop + iced lemon tea</div>
+            </div>
+            <div class="active-badge">RM 12.50</div>
+          </div>
+
+          <div class="status-track">
+            <div class="status-fill"></div>
+            <div class="status-step"><div class="step-dot done"></div><div class="step-label">Placed</div></div>
+            <div class="status-step"><div class="step-dot done"></div><div class="step-label">Cooking</div></div>
+            <div class="status-step"><div class="step-dot now"></div><div class="step-label now">Picked<br>up</div></div>
+            <div class="status-step"><div class="step-dot"></div><div class="step-label">Delivered</div></div>
+          </div>
+
+          <div class="active-footer">
+            <span>Runner: <b>Danish, Year 2</b></span>
+            <span>ETA <b>6 min</b></span>
+          </div>
+          <button class="btn-block">Message runner</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Open near you</h3>
+          <a href="unift-browse-stalls.html">See all stalls →</a>
+        </div>
+        <div class="stall-grid">
+          <div class="stall-card">
+            <div class="s-ic">🍜</div>
+            <div>
+              <b>Song Kee Kopitiam</b>
+              <span>Hor fun, noodle soups</span>
+              <div class="stall-open"><span class="d"></span>Open · 11 min</div>
+            </div>
+          </div>
+          <div class="stall-card">
+            <div class="s-ic">🍚</div>
+            <div>
+              <b>Kak Minah Warung</b>
+              <span>Nasi lemak, rice sets</span>
+              <div class="stall-open"><span class="d"></span>Open · 14 min</div>
+            </div>
+          </div>
+          <div class="stall-card">
+            <div class="s-ic">☕</div>
+            <div>
+              <b>Ah Seng CKT</b>
+              <span>Char kuey teow, drinks</span>
+              <div class="stall-open"><span class="d"></span>Open · 9 min</div>
+            </div>
+          </div>
+          <div class="stall-card">
+            <div class="s-ic">🥘</div>
+            <div>
+              <b>Restoran Ali</b>
+              <span>Roti canai, mamak grills</span>
+              <div class="stall-open"><span class="d"></span>Open · 13 min</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Recent orders</h3>
+        <span class="count">Last 5 orders</span>
+      </div>
+      <table class="history-table">
+        <thead>
+          <tr><th>Order</th><th>Stall</th><th>Dish</th><th>Delivered in</th><th>Total</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#UN2277</td><td>Ah Seng CKT</td><td>Char kuey teow</td><td>12 min</td><td>RM 9.50</td>
+            <td><button class="btn-reorder">Reorder</button></td>
+          </tr>
+          <tr>
+            <td>#UN2264</td><td>Restoran Ali</td><td>Roti canai set</td><td>16 min</td><td>RM 7.00</td>
+            <td><button class="btn-reorder">Reorder</button></td>
+          </tr>
+          <tr>
+            <td>#UN2251</td><td>Kak Minah Warung</td><td>Nasi lemak rendang</td><td>10 min</td><td>RM 8.50</td>
+            <td><button class="btn-reorder">Reorder</button></td>
+          </tr>
+          <tr>
+            <td>#UN2238</td><td>Song Kee Kopitiam</td><td>Hor fun</td><td>13 min</td><td>RM 8.00</td>
+            <td><button class="btn-reorder">Reorder</button></td>
+          </tr>
+          <tr>
+            <td>#UN2219</td><td>Ah Seng CKT</td><td>Wonton mee</td><td>9 min</td><td>RM 9.00</td>
+            <td><button class="btn-reorder">Reorder</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div class="help-tip">Order stuck or wrong? Tap here for live support — average reply under 2 min.</div>
+<div class="help-bubble">?</div>
+
+</body>
+</html>

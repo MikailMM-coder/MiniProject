@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unift — food's here before your lecture is</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3E8;
+    --paper-2:#EFE9D6;
+    --navy:#1D2B4F;
+    --navy-soft:#5B6478;
+    --card:#FFFFFF;
+    --yellow:#FFC93C;
+    --yellow-dark:#B87F00;
+    --green:#2F9C63;
+    --green-bg:#E3F3E9;
+    --coral:#E8562F;
+    --coral-bg:#FCE7DF;
+    --teal:#0F6E56;
+    --teal-bg:#E1F1EC;
+    --line:#1D2B4F;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--navy);
+    font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif; margin:0;}
+  .note-font{font-family:'Caveat',cursive;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 40px;}
+  a{color:inherit;}
+
+  /* ---------- Nav ---------- */
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 40px; max-width:1180px; margin:0 auto;
+  }
+  .logo{display:flex; align-items:center; gap:9px;}
+  .logo-mark{
+    width:34px; height:34px; border-radius:9px; background:var(--navy);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .logo-mark svg{width:18px; height:18px;}
+  .logo-text{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px;}
+  .nav-links{display:flex; gap:30px; list-style:none; margin:0; padding:0; font-size:14.5px; font-weight:500; color:var(--navy-soft);}
+  .nav-links a{text-decoration:none;}
+  .nav-links a:hover{color:var(--navy);}
+
+  .nav-right{display:flex; align-items:center; gap:12px;}
+  .login-menu{position:relative;}
+  .login-btn{
+    display:flex; align-items:center; gap:6px; background:var(--card);
+    border:1.5px solid var(--line); border-radius:999px; padding:9px 16px;
+    font-size:13.5px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; color:var(--navy);
+  }
+  .login-btn .chev{font-size:10px; color:var(--navy-soft);}
+  .login-dropdown{
+    position:absolute; top:calc(100% + 8px); right:0; background:var(--card);
+    border:1.5px solid var(--line); border-radius:14px; padding:8px; width:210px;
+    box-shadow:0 10px 0 rgba(0,0,0,0.06); display:none; z-index:20;
+  }
+  .login-menu:hover .login-dropdown{display:block;}
+  .login-option{
+    display:flex; align-items:center; gap:10px; padding:10px 10px; border-radius:9px;
+    cursor:pointer; text-decoration:none; color:var(--navy);
+  }
+  .login-option:hover{background:var(--paper-2);}
+  .login-option .lo-ic{
+    width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:700; flex-shrink:0;
+  }
+  .login-option .lo-ic.student{background:var(--yellow); color:var(--navy);}
+  .login-option .lo-ic.runner{background:var(--coral-bg); color:var(--coral);}
+  .login-option .lo-ic.vendor{background:var(--teal-bg); color:var(--teal);}
+  .login-option .lo-text b{display:block; font-size:13px; font-weight:600;}
+  .login-option .lo-text span{font-size:11.5px; color:var(--navy-soft);}
+
+  .profile-chip{
+    display:flex; align-items:center; gap:9px; background:var(--card);
+    border:1.5px solid var(--line); border-radius:999px; padding:6px 14px 6px 6px;
+    font-size:13.5px; font-weight:600;
+  }
+  .avatar{
+    width:28px; height:28px; border-radius:50%; background:var(--yellow);
+    display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; color:var(--navy);
+  }
+  .credit-pill{
+    display:flex; align-items:center; gap:4px; font-size:12px; color:var(--navy-soft); font-weight:500;
+  }
+  .credit-pill .dot-g{width:6px; height:6px; border-radius:50%; background:var(--green);}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:60px 0 0;}
+  .hero-grid{display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center;}
+  .tag-row{display:flex; gap:8px; margin-bottom:22px;}
+  .tag{
+    font-size:12.5px; font-weight:600; padding:5px 12px; border-radius:999px;
+    border:1.5px solid var(--line);
+  }
+  .tag.on{background:var(--green-bg); border-color:var(--green); color:#1D6B3F;}
+
+  .hero h1{font-size:50px; line-height:1.05; margin-bottom:20px;}
+  .hero h1 .accent{
+    background:var(--yellow); padding:2px 10px; display:inline-block; border-radius:6px;
+    transform:rotate(-1.5deg);
+  }
+  .hero p.sub{font-size:16.5px; line-height:1.6; color:var(--navy-soft); max-width:440px; margin:0 0 30px;}
+
+  .search-bar{
+    display:flex; align-items:center; gap:0; background:var(--card);
+    border:2px solid var(--line); border-radius:14px; padding:6px; margin-bottom:14px; max-width:480px;
+  }
+  .search-bar select, .search-bar input{
+    border:none; outline:none; background:transparent; font-family:'Inter',sans-serif;
+    font-size:14px; color:var(--navy); padding:10px 12px;
+  }
+  .search-bar select{border-right:1.5px solid var(--paper-2); font-weight:600; max-width:130px;}
+  .search-bar input{flex:1;}
+  .search-bar button{
+    background:var(--navy); color:var(--paper); border:none; border-radius:9px;
+    padding:11px 20px; font-weight:600; font-size:14px; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+  .hero-hint{font-size:13px; color:var(--navy-soft); margin-bottom:36px;}
+  .hero-hint b{color:var(--navy);}
+
+  .cta-row{display:flex; gap:14px;}
+  .btn-primary{
+    background:var(--navy); color:var(--paper); border:2px solid var(--navy);
+    padding:13px 24px; border-radius:10px; font-weight:600; font-size:14.5px; cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-ghost{
+    background:transparent; color:var(--navy); border:2px solid var(--line);
+    padding:13px 24px; border-radius:10px; font-weight:600; font-size:14.5px; cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+
+  /* ---------- hero right: ID card + status ---------- */
+  .id-card{
+    background:var(--navy); color:var(--paper); border-radius:18px; padding:24px;
+    border:2px solid var(--line); position:relative;
+  }
+  .id-top{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:22px;}
+  .id-brand{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:14px; letter-spacing:0.02em;}
+  .id-badge{font-size:11px; background:var(--yellow); color:var(--navy); padding:3px 9px; border-radius:6px; font-weight:700;}
+  .id-order{font-size:12.5px; color:#A7B0C4; margin-bottom:4px;}
+  .id-dish{font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; margin-bottom:22px;}
+
+  .status-track{display:flex; justify-content:space-between; position:relative; margin-bottom:8px;}
+  .status-track::before{
+    content:''; position:absolute; top:9px; left:9px; right:9px; height:2px; background:#39456A;
+  }
+  .status-fill{
+    position:absolute; top:9px; left:9px; height:2px; background:var(--yellow); width:64%;
+  }
+  .status-step{display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; z-index:1; width:60px;}
+  .step-dot{width:20px; height:20px; border-radius:50%; background:#39456A; border:2px solid var(--navy); display:flex; align-items:center; justify-content:center;}
+  .step-dot.done{background:var(--yellow);}
+  .step-dot.now{background:var(--yellow); box-shadow:0 0 0 4px rgba(255,201,60,0.25);}
+  .step-label{font-size:10.5px; color:#A7B0C4; text-align:center;}
+  .step-label.now{color:var(--paper); font-weight:600;}
+
+  .id-footer{display:flex; justify-content:space-between; margin-top:22px; padding-top:16px; border-top:1px dashed #39456A; font-size:12.5px; color:#A7B0C4;}
+  .id-footer b{color:var(--paper);}
+
+  .sticky-float{
+    position:absolute; background:var(--yellow); color:var(--navy); padding:10px 16px 12px;
+    border-radius:4px; font-family:'Caveat',cursive; font-size:19px; font-weight:700;
+    transform:rotate(4deg); box-shadow:0 6px 0 rgba(0,0,0,0.08); right:-18px; bottom:-18px; z-index:5;
+  }
+
+  /* ---------- Runner image carousel ---------- */
+  .runner-carousel{
+    position:relative; border-radius:18px; overflow:hidden;
+    border:2px solid var(--line); background:var(--navy); height:420px;
+  }
+  .carousel-track{
+    display:flex; height:100%; transition:transform 0.5s ease;
+  }
+  .carousel-slide{
+    min-width:100%; height:100%; position:relative;
+  }
+  .carousel-slide img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  /* Placeholder shown until a real <img src> is added */
+  .carousel-placeholder{
+    width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:10px; background:
+      repeating-linear-gradient(45deg, #26355C, #26355C 12px, #2A3B66 12px, #2A3B66 24px);
+    color:var(--paper); text-align:center; padding:30px;
+  }
+  .carousel-placeholder .ph-icon{
+    width:56px; height:56px; border-radius:50%; background:rgba(255,255,255,0.12);
+    display:flex; align-items:center; justify-content:center; font-size:24px;
+  }
+  .carousel-placeholder b{font-family:'Space Grotesk',sans-serif; font-size:15px;}
+  .carousel-placeholder span{font-size:12px; color:#B9C1D6; max-width:220px; line-height:1.5;}
+
+  .carousel-caption{
+    position:absolute; left:0; right:0; bottom:0; padding:18px 20px;
+    background:linear-gradient(to top, rgba(29,43,79,0.88), rgba(29,43,79,0));
+    color:var(--paper); font-family:'Inter',sans-serif;
+  }
+  .carousel-caption b{font-family:'Space Grotesk',sans-serif; font-size:15px; display:block;}
+  .carousel-caption span{font-size:12px; color:#CBD4E6;}
+
+  .carousel-arrow{
+    position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%;
+    background:var(--paper); color:var(--navy); border:1.5px solid var(--line); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; z-index:4;
+  }
+  .carousel-arrow.left{left:14px;}
+  .carousel-arrow.right{right:14px;}
+
+  .carousel-dots{
+    position:absolute; top:16px; left:0; right:0; display:flex; gap:6px; justify-content:center; z-index:4;
+  }
+  .carousel-dots .cdot{
+    width:20px; height:4px; border-radius:2px; background:rgba(255,255,255,0.35); cursor:pointer; transition:background 0.2s;
+  }
+  .carousel-dots .cdot.active{background:var(--yellow);}
+
+  @media (max-width:980px){ .hero-grid{grid-template-columns:1fr;} .hero h1{font-size:38px;} }
+
+  /* ---------- Problems / corkboard ---------- */
+  .section{padding:96px 0;}
+  .section-label{
+    font-size:12.5px; font-weight:700; color:var(--coral); text-transform:uppercase;
+    letter-spacing:0.07em; margin-bottom:10px;
+  }
+  .section-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:44px; gap:24px;}
+  .section-head h2{font-size:32px; line-height:1.15; max-width:520px;}
+  .section-head p{font-size:14.5px; color:var(--navy-soft); max-width:320px; margin:0;}
+
+  .board{
+    background:var(--paper-2); border:2px solid var(--line); border-radius:20px;
+    padding:36px; display:grid; grid-template-columns:repeat(4,1fr); gap:22px;
+  }
+  @media (max-width:980px){ .board{grid-template-columns:repeat(2,1fr);} }
+
+  .pin-card{
+    background:var(--card); border:1.5px solid var(--line); border-radius:12px;
+    padding:20px; position:relative;
+  }
+  .pin-card:nth-child(2){transform:rotate(1.2deg);}
+  .pin-card:nth-child(3){transform:rotate(-1deg);}
+  .pin-card:nth-child(4){transform:rotate(0.8deg);}
+  .pin{
+    width:12px; height:12px; border-radius:50%; background:var(--coral);
+    position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+    box-shadow:0 2px 3px rgba(0,0,0,0.2);
+  }
+  .pin-icon{font-size:24px; margin-bottom:12px;}
+  .pin-card h4{font-size:15.5px; margin-bottom:7px;}
+  .pin-card p{font-size:13px; color:var(--navy-soft); line-height:1.5; margin:0;}
+
+  /* ---------- how it works ---------- */
+  .how-wrap{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  @media (max-width:980px){ .how-wrap{grid-template-columns:repeat(2,1fr);} }
+  .how-card{
+    background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:24px;
+    position:relative;
+  }
+  .how-num{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px;
+    width:30px; height:30px; border-radius:9px; background:var(--yellow); color:var(--navy);
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+  }
+  .how-card h4{font-size:15.5px; margin-bottom:7px;}
+  .how-card p{font-size:13px; color:var(--navy-soft); line-height:1.5; margin:0;}
+  .how-connector{
+    position:absolute; top:29px; left:100%; width:20px; height:2px; background:var(--paper-2);
+  }
+
+  /* ---------- runner + vendor panels ---------- */
+  .runner-panel{
+    background:var(--navy); color:var(--paper); border-radius:22px; padding:52px;
+    display:grid; grid-template-columns:1fr 0.8fr; gap:40px; align-items:center;
+    border:2px solid var(--line);
+  }
+  @media (max-width:980px){ .runner-panel{grid-template-columns:1fr; padding:36px;} }
+  .runner-panel .section-label{color:var(--yellow);}
+  .runner-panel h2{font-size:30px; margin-bottom:16px; max-width:420px;}
+  .runner-panel p{font-size:14.5px; color:#B9C1D6; max-width:400px; margin:0 0 26px; line-height:1.6;}
+  .runner-stats{display:flex; gap:28px; margin-bottom:26px;}
+  .stat b{font-family:'Space Grotesk',sans-serif; font-size:24px; display:block;}
+  .stat span{font-size:12px; color:#A7B0C4;}
+  .btn-yellow{
+    background:var(--yellow); color:var(--navy); border:2px solid var(--yellow);
+    padding:13px 24px; border-radius:10px; font-weight:700; font-size:14.5px; cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-teal{
+    background:var(--teal); color:var(--paper); border:2px solid var(--teal);
+    padding:13px 24px; border-radius:10px; font-weight:700; font-size:14.5px; cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+
+  .runner-card{
+    background:#26355C; border-radius:16px; padding:22px; border:1px solid #39456A;
+  }
+  .runner-card-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;}
+  .runner-avatar{display:flex; align-items:center; gap:10px;}
+  .r-av{width:36px; height:36px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; color:#fff;}
+  .r-av.vendor{background:var(--teal);}
+  .r-name{font-size:13.5px; font-weight:600;}
+  .r-role{font-size:11.5px; color:#A7B0C4;}
+  .live-dot{display:flex; align-items:center; gap:6px; font-size:11.5px; color:#8FE0B0;}
+  .live-dot .d{width:7px; height:7px; border-radius:50%; background:var(--green);}
+  .earn-row{display:flex; justify-content:space-between; font-size:13px; color:#A7B0C4; padding:8px 0; border-bottom:1px dashed #39456A;}
+  .earn-row b{color:var(--paper); font-weight:600;}
+  .earn-total{display:flex; justify-content:space-between; padding-top:12px; font-size:14.5px; font-weight:700;}
+
+  .vendor-panel{background:var(--paper-2); border:2px solid var(--line);}
+  .vendor-panel .section-label{color:var(--teal);}
+  .vendor-panel .runner-card{background:var(--card); border:1px solid var(--line);}
+  .vendor-panel .earn-row{color:var(--navy-soft); border-bottom:1px dashed var(--paper-2);}
+  .vendor-panel .earn-row b{color:var(--navy);}
+  .vendor-panel .r-role{color:var(--navy-soft);}
+  .vendor-panel .live-dot{color:#1D6B3F;}
+
+  /* ---------- Help / footer ---------- */
+  .help-band{
+    background:var(--paper-2); border-top:2px solid var(--line); border-bottom:2px solid var(--line);
+    padding:56px 0;
+  }
+  .help-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;}
+  @media (max-width:980px){ .help-grid{grid-template-columns:1fr;} }
+  .faq-item{border-bottom:1.5px solid var(--line); padding:14px 0; display:flex; justify-content:space-between; align-items:center; font-size:14.5px; font-weight:500;}
+  .faq-item span.a{color:var(--navy-soft); font-weight:400;}
+
+  footer{padding:30px 0; font-size:13px; color:var(--navy-soft);}
+  .foot-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;}
+
+  .help-bubble{
+    position:fixed; bottom:26px; right:26px; background:var(--navy); color:var(--paper);
+    width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:2px solid var(--line); font-size:20px; cursor:pointer; z-index:10;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12L11 3L20 8L13 17L4 12Z" stroke="#FFC93C" stroke-width="2" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="logo-text">unift</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#problems">Why Unift</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#runner">Become a runner</a></li>
+    <li><a href="#vendor">For vendors</a></li>
+    <li><a href="#help">Help</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="login-menu">
+      <div class="login-btn">Log in <span class="chev">▾</span></div>
+      <div class="login-dropdown">
+        <a class="login-option" href="#">
+          <div class="lo-ic student">S</div>
+          <div class="lo-text"><b>Student</b><span>Order food on campus</span></div>
+        </a>
+        <a class="login-option" href="#runner">
+          <div class="lo-ic runner">R</div>
+          <div class="lo-text"><b>Runner</b><span>Deliver, earn between classes</span></div>
+        </a>
+        <a class="login-option" href="#vendor">
+          <div class="lo-ic vendor">V</div>
+          <div class="lo-text"><b>Vendor</b><span>Manage your stall on Unift</span></div>
+        </a>
+      </div>
+    </div>
+    <div class="profile-chip">
+      <div class="avatar">M</div>
+      <div>
+        <div>Michael</div>
+        <div class="credit-pill"><span class="dot-g"></span>RM12 credit</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="tag-row">
+        <div class="tag on">● 214 runners online</div>
+        <div class="tag">Campus: UIS</div>
+      </div>
+      <h1>food's here <span class="accent">before</span><br>your lecture is.</h1>
+      <p class="sub">Order from campus eateries, delivered by fellow students walking your way. No car, no hike to the cafeteria, no missed lecture.</p>
+
+      <div class="search-bar">
+        <select>
+          <option>Main cafeteria</option>
+          <option>College blocks</option>
+          <option>Library area</option>
+        </select>
+        <input type="text" placeholder="Search a stall, cuisine, or dish...">
+        <button>Search</button>
+      </div>
+      <div class="hero-hint">Average drop-off time on campus: <b>11 minutes</b></div>
+
+      <div class="cta-row">
+        <button class="btn-primary">Order now</button>
+        <button class="btn-ghost">Become a runner</button>
+      </div>
+    </div>
+
+    <div style="position:relative;">
+      <div class="runner-carousel" id="runnerCarousel">
+        <div class="carousel-dots" id="carouselDots">
+          <span class="cdot active" onclick="carouselGoTo(0)"></span>
+          <span class="cdot" onclick="carouselGoTo(1)"></span>
+          <span class="cdot" onclick="carouselGoTo(2)"></span>
+          <span class="cdot" onclick="carouselGoTo(3)"></span>
+          <span class="cdot" onclick="carouselGoTo(4)"></span>
+        </div>
+
+        <div class="carousel-track" id="carouselTrack">
+          <div class="carousel-slide">
+            <svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="420" fill="#123B34"/>
+              <circle cx="330" cy="70" r="90" fill="#0F6E56" opacity="0.5"/>
+              <rect x="0" y="300" width="400" height="120" fill="#0F4C42"/>
+              <rect x="70" y="230" width="150" height="90" rx="6" fill="#E1F1EC"/>
+              <rect x="70" y="230" width="150" height="18" fill="#0B5443"/>
+              <text x="145" y="278" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="15" fill="#1D2B4F">SONG KEE</text>
+              <text x="145" y="298" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#5B6478">Kopitiam counter</text>
+              <g>
+                <circle cx="275" cy="245" r="26" fill="#F0C99A"/>
+                <path d="M249 258 q26 -22 52 0 l0 55 -52 0 Z" fill="#E8562F"/>
+                <rect x="292" y="252" width="34" height="30" rx="5" fill="#FFC93C" stroke="#1D2B4F" stroke-width="1.5"/>
+                <path d="M296 252 q13 -14 26 0" fill="none" stroke="#1D2B4F" stroke-width="2.5"/>
+              </g>
+              <rect x="30" y="330" width="340" height="4" fill="#1D2B4F" opacity="0.4"/>
+            </svg>
+          </div>
+
+          <div class="carousel-slide">
+            <svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="420" fill="#1D2B4F"/>
+              <rect x="0" y="0" width="400" height="230" fill="#26355C"/>
+              <rect x="20" y="40" width="70" height="160" fill="#2A3B66"/>
+              <rect x="110" y="70" width="55" height="130" fill="#2A3B66"/>
+              <rect x="300" y="30" width="80" height="170" fill="#2A3B66"/>
+              <circle cx="330" cy="70" r="3" fill="#FFC93C"/>
+              <circle cx="350" cy="90" r="3" fill="#FFC93C"/>
+              <rect x="0" y="330" width="400" height="90" fill="#152238"/>
+              <g transform="translate(150,255)">
+                <circle cx="10" cy="130" r="26" fill="none" stroke="#FFC93C" stroke-width="6"/>
+                <circle cx="120" cy="130" r="26" fill="none" stroke="#FFC93C" stroke-width="6"/>
+                <path d="M10 130 L55 60 L120 130 M55 60 L75 130 M55 60 L40 40 L20 40" fill="none" stroke="#F7F3E8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="40" cy="30" r="15" fill="#F0C99A"/>
+                <rect x="66" y="18" width="34" height="26" rx="5" fill="#E8562F" stroke="#F7F3E8" stroke-width="1.5"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="carousel-slide">
+            <svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="420" fill="#2A3B66"/>
+              <rect x="0" y="0" width="400" height="420" fill="#1D2B4F"/>
+              <rect x="60" y="80" width="280" height="300" rx="10" fill="#26355C" stroke="#39456A" stroke-width="2"/>
+              <rect x="170" y="260" width="60" height="120" fill="#152238"/>
+              <circle cx="215" cy="320" r="4" fill="#FFC93C"/>
+              <g transform="translate(115,150)">
+                <circle cx="20" cy="20" r="18" fill="#F0C99A"/>
+                <path d="M0 40 q20 -18 40 0 l0 90 -40 0 Z" fill="#0F6E56"/>
+              </g>
+              <g transform="translate(210,150)">
+                <circle cx="20" cy="20" r="18" fill="#E3B27E"/>
+                <path d="M0 40 q20 -18 40 0 l0 90 -40 0 Z" fill="#E8562F"/>
+                <rect x="38" y="34" width="30" height="26" rx="5" fill="#FFC93C" stroke="#1D2B4F" stroke-width="1.5"/>
+              </g>
+              <text x="200" y="60" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="14" fill="#F7F3E8">BLOCK C · ROOM 214</text>
+            </svg>
+          </div>
+
+          <div class="carousel-slide">
+            <svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="420" fill="#FFC93C"/>
+              <rect x="0" y="260" width="400" height="160" fill="#1D2B4F"/>
+              <g transform="translate(140,110)">
+                <circle cx="40" cy="30" r="26" fill="#F0C99A"/>
+                <path d="M14 56 q26 -22 52 0 l0 110 -52 0 Z" fill="#1D2B4F"/>
+                <rect x="14" y="90" width="52" height="40" rx="6" fill="#E8562F"/>
+                <path d="M40 4 a26 26 0 0 1 26 26 l-52 0 a26 26 0 0 1 26 -26 Z" fill="#0F6E56"/>
+              </g>
+              <path d="M60 300 q140 -50 280 0" fill="none" stroke="#F7F3E8" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>
+              <text x="200" y="360" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="17" fill="#F7F3E8">order delivered</text>
+              <text x="200" y="385" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#B9C1D6">still hot, right on time</text>
+            </svg>
+          </div>
+
+          <div class="carousel-slide">
+            <svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="420" fill="#0F4C42"/>
+              <rect x="0" y="270" width="400" height="150" fill="#0B3A33"/>
+              <rect x="70" y="230" width="260" height="55" rx="6" fill="#E1F1EC"/>
+              <rect x="90" y="180" width="90" height="60" rx="4" fill="#152238"/>
+              <rect x="96" y="186" width="78" height="42" rx="2" fill="#3A5A9C"/>
+              <circle cx="240" cy="245" r="16" fill="#F5EEDD"/>
+              <path d="M224 245 a16 16 0 0 1 32 0" fill="#E8562F"/>
+              <rect x="266" y="235" width="40" height="30" rx="5" fill="#FFC93C"/>
+              <path d="M270 235 q16 -16 32 0" fill="none" stroke="#1D2B4F" stroke-width="2.5"/>
+              <text x="200" y="60" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="16" fill="#F7F3E8">back to the assignment</text>
+              <text x="200" y="84" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#A9CFC5">fuelled, focused, on time</text>
+            </svg>
+          </div>
+        </div>
+
+        <button class="carousel-arrow left" onclick="carouselNav(-1)" aria-label="Previous image">‹</button>
+        <button class="carousel-arrow right" onclick="carouselNav(1)" aria-label="Next image">›</button>
+      </div>
+      <div class="sticky-float">assignment can wait 6 min :)</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function(){
+    const totalSlides = 5;
+    let currentIndex = 0;
+    let autoplayTimer = null;
+    const track = document.getElementById('carouselTrack');
+    const dots = document.querySelectorAll('#carouselDots .cdot');
+
+    function render(){
+      track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+    }
+    function goTo(index){
+      currentIndex = (index + totalSlides) % totalSlides;
+      render();
+    }
+    function startAutoplay(){
+      clearInterval(autoplayTimer);
+      autoplayTimer = setInterval(() => goTo(currentIndex + 1), 3000);
+    }
+    // Manual navigation (arrow click) pauses autoplay for 20s, then resumes
+    let resumeTimeout = null;
+    window.carouselNav = function(dir){
+      goTo(currentIndex + dir);
+      clearInterval(autoplayTimer);
+      clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoplay, 20000);
+    };
+    window.carouselGoTo = function(i){
+      goTo(i);
+      clearInterval(autoplayTimer);
+      clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoplay, 20000);
+    };
+
+    render();
+    startAutoplay();
+  })();
+</script>
+
+<br><br><br><br>
+
+<section class="section" id="how" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-label">how it works</div>
+        <h2>Four steps, tracked the whole way.</h2>
+      </div>
+      <p>Same status bar you see on your ID card above, from tap to doorstep.</p>
+    </div>
+    <div class="how-wrap">
+      <div class="how-card">
+        <div class="how-num">01</div>
+        <h4>Pick a stall</h4>
+        <p>Every eatery on your actual campus map, not a random delivery zone.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <h4>A runner accepts</h4>
+        <p>A fellow student nearby picks up your order between their own classes.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+        <h4>Track it live</h4>
+        <p>Watch it move from cooking to picked up, right on the status bar.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">04</div>
+        <h4>Delivered to you</h4>
+        <p>Straight to your block, library floor, or lecture hall lobby.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="runner" style="padding-top:0;">
+  <div class="wrap">
+    <div class="runner-panel">
+      <div>
+        <div class="section-label">for runners</div>
+        <h2>Turn your walk to class into extra income.</h2>
+        <p>Set your own hours between lectures, deliver within your own campus, and get paid out weekly. No car needed — most runners do it on foot or bike.</p>
+        <div class="runner-stats">
+          <div class="stat"><b>RM4–7</b><span>per delivery</span></div>
+          <div class="stat"><b>15–20</b><span>min average run</span></div>
+          <div class="stat"><b>Weekly</b><span>payout</span></div>
+        </div>
+        <button class="btn-yellow">Apply as a runner</button>
+      </div>
+
+      <div class="runner-card">
+        <div class="runner-card-top">
+          <div class="runner-avatar">
+            <div class="r-av">D</div>
+            <div>
+              <div class="r-name">Danish</div>
+              <div class="r-role">Year 2, Engineering</div>
+            </div>
+          </div>
+          <div class="live-dot"><span class="d"></span>On a run</div>
+        </div>
+        <div class="earn-row"><span>Today, 4 runs</span><b>RM 21.00</b></div>
+        <div class="earn-row"><span>This week</span><b>RM 96.50</b></div>
+        <div class="earn-total"><span>Next payout, Fri</span><b>RM 96.50</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="vendor" style="padding-top:0;">
+  <div class="wrap">
+    <div class="runner-panel vendor-panel">
+      <div>
+        <div class="section-label">for vendors</div>
+        <h2 style="color:var(--navy);">Get your stall in front of every student on campus.</h2>
+        <p style="color:var(--navy-soft);">List your menu once, get orders straight to your counter, and reach students who'd never have found your line otherwise. Runners handle the delivery — you handle the wok.</p>
+        <div class="runner-stats">
+          <div class="stat"><b style="color:var(--navy);">0%</b><span>setup fee</span></div>
+          <div class="stat"><b style="color:var(--navy);">Daily</b><span>payout to your account</span></div>
+          <div class="stat"><b style="color:var(--navy);">Live</b><span>order dashboard</span></div>
+        </div>
+        <button class="btn-teal">Register your stall</button>
+      </div>
+
+      <div class="runner-card">
+        <div class="runner-card-top">
+          <div class="runner-avatar">
+            <div class="r-av vendor">S</div>
+            <div>
+              <div class="r-name" style="color:var(--navy);">Song Kee Kopitiam</div>
+              <div class="r-role">Main cafeteria, lot 4</div>
+            </div>
+          </div>
+          <div class="live-dot"><span class="d" style="background:var(--teal);"></span>3 orders live</div>
+        </div>
+        <div class="earn-row"><span>Today, 42 orders</span><b>RM 318.00</b></div>
+        <div class="earn-row"><span>This week</span><b>RM 1,940.00</b></div>
+        <div class="earn-total"><span>Next payout, tomorrow</span><b>RM 318.00</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="help-band" id="help">
+  <div class="wrap help-grid">
+    <div>
+      <div class="section-label">help, quick</div>
+      <h2 style="font-size:28px; margin-bottom:10px;">Answers before you have to ask.</h2>
+      <p style="font-size:14px; color:var(--navy-soft); margin:0;">Can't find yours? A real support chat is one tap away, day or night.</p>
+    </div>
+    <div>
+      <div class="faq-item"><span class="q">Is my food actually hot on arrival?</span><span class="a">Insulated bags, yes</span></div>
+      <div class="faq-item"><span class="q">Can I pay with student e-wallet?</span><span class="a">Yes, and cash</span></div>
+      <div class="faq-item"><span class="q">What if my runner is late?</span><span class="a">Auto credit refund</span></div>
+      <div class="faq-item"><span class="q">How do vendors get paid out?</span><span class="a">Daily, to your account</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>© 2026 Unift. Built by students, run by students.</span>
+    <span>UM · UPM · UKM · Sunway · Monash Malaysia</span>
+  </div>
+</footer>
+
+<div class="help-bubble">?</div>
+
+</body>
+</html>

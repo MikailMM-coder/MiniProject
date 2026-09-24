@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unift — Sign in / Sign up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3E8;
+    --paper-2:#EFE9D6;
+    --navy:#1D2B4F;
+    --navy-2:#14213D;
+    --navy-soft:#5B6478;
+    --card:#FFFFFF;
+    --yellow:#FFC93C;
+    --green:#2F9C63;
+    --green-bg:#E3F3E9;
+    --coral:#E8562F;
+    --coral-bg:#FCE7DF;
+    --teal:#0F6E56;
+    --line:#1D2B4F;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0; color:var(--navy);
+    font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    background:
+      radial-gradient(560px circle at 12% 8%, rgba(255,201,60,0.16), transparent 60%),
+      radial-gradient(620px circle at 92% 88%, rgba(15,110,86,0.35), transparent 55%),
+      linear-gradient(135deg, var(--navy-2) 0%, var(--navy) 46%, #123B34 100%);
+    display:flex; align-items:center; justify-content:center; padding:40px 20px;
+    position:relative; overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif; margin:0;}
+
+  .brand{
+    position:fixed; top:28px; left:32px; display:flex; align-items:center; gap:9px; z-index:5;
+  }
+  .brand-mark{
+    width:36px; height:36px; border-radius:10px; background:var(--yellow);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .brand-mark svg{width:19px; height:19px;}
+  .brand-text{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; color:var(--paper);}
+
+  /* faint dotted route line, campus-map flavour, decorative */
+  .route-deco{
+    position:fixed; inset:0; z-index:0; opacity:0.5; pointer-events:none;
+  }
+
+  .auth-wrap{position:relative; z-index:2; width:100%; max-width:420px;}
+
+  .auth-card{
+    background:var(--card); border-radius:22px; padding:38px 34px 30px;
+    box-shadow:0 30px 60px rgba(10,16,34,0.35);
+    border:1.5px solid rgba(29,43,79,0.06);
+  }
+
+  .auth-head{margin-bottom:22px;}
+  .auth-head h1{font-size:23px; margin-bottom:6px;}
+  .auth-head p{font-size:13px; color:var(--navy-soft); margin:0;}
+
+  .tab-row{
+    display:flex; background:var(--paper-2); border-radius:11px; padding:4px; margin-bottom:24px;
+  }
+  .tab-btn{
+    flex:1; border:none; background:transparent; padding:10px; border-radius:8px;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13.5px; color:var(--navy-soft); cursor:pointer;
+    transition:all 0.15s ease;
+  }
+  .tab-btn.active{background:var(--navy); color:var(--paper);}
+
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block; font-size:12.5px; font-weight:700; margin-bottom:6px; color:var(--navy);
+  }
+  .field-input-wrap{position:relative;}
+  .field input{
+    width:100%; border:1.5px solid #DDD6C2; background:var(--paper); border-radius:10px;
+    padding:12px 14px; font-family:'Inter',sans-serif; font-size:14px; color:var(--navy);
+    outline:none; transition:border-color 0.15s ease;
+  }
+  .field input:focus{border-color:var(--navy);}
+  .field input.err{border-color:var(--coral); background:var(--coral-bg);}
+  .field .err-msg{
+    font-size:11.5px; color:var(--coral); margin-top:5px; display:none; font-weight:600;
+  }
+  .field.has-error .err-msg{display:block;}
+
+  .toggle-eye{
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    background:none; border:none; cursor:pointer; font-size:13px; color:var(--navy-soft); font-weight:600;
+    padding:4px;
+  }
+
+  .name-field{
+    overflow:hidden; max-height:78px; transition:max-height 0.25s ease, opacity 0.2s ease, margin 0.25s ease; opacity:1;
+  }
+  .name-field.collapsed{max-height:0; opacity:0; margin-bottom:0;}
+
+  .btn-submit{
+    width:100%; background:var(--coral); color:var(--paper); border:none; border-radius:11px;
+    padding:13px; font-weight:700; font-size:14.5px; cursor:pointer; margin-top:6px;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-submit:active{transform:scale(0.98);}
+
+  .divider{
+    display:flex; align-items:center; gap:10px; margin:20px 0; color:var(--navy-soft); font-size:11.5px;
+  }
+  .divider::before, .divider::after{content:''; flex:1; height:1px; background:var(--paper-2);}
+
+  .role-row{display:flex; gap:8px; margin-bottom:18px;}
+  .role-chip{
+    flex:1; border:1.5px solid #DDD6C2; background:var(--paper); border-radius:10px; padding:9px 6px;
+    text-align:center; font-size:11.5px; font-weight:700; color:var(--navy-soft); cursor:pointer;
+  }
+  .role-chip.active{border-color:var(--navy); background:var(--navy); color:var(--paper);}
+
+  .bottom-row{
+    display:flex; justify-content:space-between; align-items:center; margin-top:20px; font-size:12px;
+  }
+  .switch-text{color:var(--navy-soft);}
+  .switch-link{color:var(--coral); font-weight:700; cursor:pointer; background:none; border:none; font-family:'Inter',sans-serif; font-size:12px; padding:0;}
+  .help-link{
+    color:var(--navy-soft); font-weight:600; cursor:pointer; background:none; border:none; font-family:'Inter',sans-serif; font-size:12px;
+    display:flex; align-items:center; gap:5px;
+  }
+  .help-link .hq{
+    width:16px; height:16px; border-radius:50%; border:1.5px solid var(--navy-soft); display:flex; align-items:center; justify-content:center;
+    font-size:10px;
+  }
+
+  .about-line{
+    margin-top:26px; padding-top:16px; border-top:1px solid var(--paper-2);
+    font-size:10.5px; color:var(--navy-soft); line-height:1.9;
+  }
+  .about-line b{color:var(--navy); font-weight:700; display:block; margin-bottom:4px; font-size:11px;}
+
+  /* success state */
+  .success-view{display:none; text-align:center; padding:10px 4px 4px;}
+  .success-view.show{display:block;}
+  .success-icon{
+    width:58px; height:58px; border-radius:50%; background:var(--green-bg); color:#1D6B3F;
+    display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 16px;
+  }
+  .success-view h2{font-size:19px; margin-bottom:8px;}
+  .success-view p{font-size:13px; color:var(--navy-soft); margin:0 0 22px; line-height:1.5;}
+  .btn-continue{
+    width:100%; background:var(--navy); color:var(--paper); border:none; border-radius:11px;
+    padding:13px; font-weight:700; font-size:14px; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+
+  /* Help popover */
+  .help-pop{
+    position:absolute; bottom:calc(100% + 10px); right:0; background:var(--navy); color:var(--paper);
+    padding:12px 14px; border-radius:10px; font-size:12px; width:210px; display:none;
+    box-shadow:0 10px 24px rgba(0,0,0,0.25);
+  }
+  .help-pop.show{display:block;}
+  .help-wrap{position:relative;}
+
+  .toast{
+    position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--navy); color:var(--paper); padding:11px 20px; border-radius:999px;
+    font-size:13px; font-weight:600; opacity:0; pointer-events:none; transition:all 0.25s ease; z-index:50;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="brand">
+  <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12L11 3L20 8L13 17L4 12Z" stroke="#1D2B4F" stroke-width="2" stroke-linejoin="round"/></svg></div>
+  <div class="brand-text">unift</div>
+</div>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+
+    <div id="formView">
+      <div class="auth-head">
+        <h1 id="headTitle">Welcome back</h1>
+        <p id="headSub">Sign in to order from your campus stalls.</p>
+      </div>
+
+      <div class="tab-row">
+        <button class="tab-btn active" id="tabSignin" onclick="setMode('signin')">Sign in</button>
+        <button class="tab-btn" id="tabSignup" onclick="setMode('signup')">Sign up</button>
+      </div>
+
+      <div class="role-row" id="roleRow" style="display:none;">
+        <div class="role-chip active" data-role="student" onclick="setRole(this)">Student</div>
+        <div class="role-chip" data-role="runner" onclick="setRole(this)">Runner</div>
+        <div class="role-chip" data-role="vendor" onclick="setRole(this)">Vendor</div>
+      </div>
+
+      <form id="authForm" onsubmit="return handleSubmit(event)" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@student.unift.edu">
+          <div class="err-msg">Enter a valid email address.</div>
+        </div>
+
+        <div class="field name-field collapsed" id="nameField">
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Your full name">
+          <div class="err-msg">Tell us your name.</div>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="field-input-wrap">
+            <input type="password" id="password" placeholder="At least 6 characters">
+            <button type="button" class="toggle-eye" onclick="togglePw()">show</button>
+          </div>
+          <div class="err-msg">Password needs at least 6 characters.</div>
+        </div>
+        <button type="submit" class="btn-submit" id="submitBtn">Sign in</button>
+      </form>
+
+      <div class="bottom-row">
+        <span class="switch-text" id="switchText">New to Unift?
+          <button class="switch-link" onclick="setMode('signup')">Create an account</button>
+        </span>
+      </div>
+
+      <div class="about-line">
+        <b>About Unift</b>
+        A student campus food delivery platform — order food, run deliveries, or sell from your stall, all in one place.
+      </div>
+    </div>
+
+    <div class="success-view" id="successView">
+      <div class="success-icon">✓</div>
+      <h2 id="successTitle">You're in!</h2>
+      <p id="successText">Signed in successfully. Redirecting you to your portal.</p>
+      <button class="btn-continue" onclick="location.href='http://127.0.0.1:5500/unift.html'">Continue</button>
+    </div>
+
+  </div>
+
+  <div class="help-wrap" style="text-align:right; margin-top:14px;">
+    <button class="help-link" style="color:var(--paper); margin-left:auto;" onclick="toggleHelp()">
+      <span class="hq" style="border-color:var(--paper);">?</span> Need help signing in?
+    </button>
+    <div class="help-pop" id="helpPop">
+      Trouble logging in? Use your campus email — the one ending in your university domain. Forgot your password? Support can reset it in under a minute.
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Please fix the highlighted fields</div>
+
+<script>
+  let mode = 'signin';
+
+  function setMode(next){
+    mode = next;
+    document.getElementById('tabSignin').classList.toggle('active', mode === 'signin');
+    document.getElementById('tabSignup').classList.toggle('active', mode === 'signup');
+    document.getElementById('nameField').classList.toggle('collapsed', mode === 'signin');
+    document.getElementById('roleRow').style.display = mode === 'signup' ? 'flex' : 'none';
+
+    document.getElementById('headTitle').textContent = mode === 'signin' ? 'Welcome back' : 'Create your account';
+    document.getElementById('headSub').textContent = mode === 'signin'
+      ? 'Sign in to order from your campus stalls.'
+      : 'Join as a student, runner, or vendor — takes a minute.';
+    document.getElementById('submitBtn').textContent = mode === 'signin' ? 'Sign in' : 'Sign up';
+
+    document.getElementById('switchText').innerHTML = mode === 'signin'
+      ? 'New to Unift? <button class="switch-link" onclick="setMode(\'signup\')">Create an account</button>'
+      : 'Already have an account? <button class="switch-link" onclick="setMode(\'signin\')">Sign in</button>';
+
+    clearErrors();
+  }
+
+  function setRole(chip){
+    document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  }
+
+  function togglePw(){
+    const pw = document.getElementById('password');
+    const btn = event.target;
+    if(pw.type === 'password'){ pw.type = 'text'; btn.textContent = 'hide'; }
+    else { pw.type = 'password'; btn.textContent = 'show'; }
+  }
+
+  function toggleHelp(){
+    document.getElementById('helpPop').classList.toggle('show');
+  }
+
+  function clearErrors(){
+    document.querySelectorAll('.field').forEach(f => f.classList.remove('has-error'));
+    document.querySelectorAll('.field input').forEach(i => i.classList.remove('err'));
+  }
+
+  function showToast(text){
+    const toast = document.getElementById('toast');
+    toast.textContent = text;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  function markError(fieldId){
+    const field = document.getElementById(fieldId).closest('.field');
+    field.classList.add('has-error');
+    document.getElementById(fieldId).classList.add('err');
+  }
+
+  function handleSubmit(e){
+    e.preventDefault();
+    clearErrors();
+
+    const email = document.getElementById('email').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const password = document.getElementById('password').value;
+
+    let valid = true;
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if(!emailOk){ markError('email'); valid = false; }
+
+    if(mode === 'signup' && name.length < 2){ markError('name'); valid = false; }
+
+    if(password.length < 6){ markError('password'); valid = false; }
+
+    if(!valid){
+      showToast('Please fix the highlighted fields');
+      return false;
+    }
+
+    const role = mode === 'signup'
+      ? document.querySelector('.role-chip.active').dataset.role
+      : 'student';
+    const roleLabel = role.charAt(0).toUpperCase() + role.slice(1);
+
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('successView').classList.add('show');
+    document.getElementById('successTitle').textContent = mode === 'signin' ? 'You\'re in!' : 'Account created!';
+    document.getElementById('successText').textContent = mode === 'signin'
+      ? 'Signed in successfully. Redirecting you to your ' + roleLabel.toLowerCase() + ' portal.'
+      : 'Welcome to Unift. Your ' + roleLabel.toLowerCase() + ' portal is ready whenever you are.';
+
+    return false;
+  }
+</script>
+
+</body>
+</html>
